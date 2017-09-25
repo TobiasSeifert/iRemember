@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 public class Hauptfenster extends JFrame{
 	
 	public Hauptfenster() {
+		int = 5;
 		
 	}
 	
