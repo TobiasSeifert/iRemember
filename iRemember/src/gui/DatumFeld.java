@@ -14,6 +14,8 @@ public class DatumFeld extends JPanel {
 
 		setLayout(new BorderLayout(5, 5));
 		
+		createWidgets();
+		addWidgets();
 
 	}
 	
