@@ -1,7 +1,10 @@
 package GUIsecond;
 
 import java.awt.AWTException;
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -11,45 +14,180 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+
+import DataStructures.Notiz;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
+	private CardLayout mainLayout;
+
+	private JLabel header;
+
+	private JPanel mainView;
+
+	private JPanel mainViewNotizen;
+	private JPanel notizenTop;
+	private JTextField filter;
+	private JComboBox<String> sortierung;
+	private JList<Notiz> notizenListe;
+	private JProgressBar einlesenProgBar;
+	private JPanel notizenBottom;
+	// TODO Bearbeiten und Erstellen
+
+	private JPanel mainViewKalender;
+
+	private JPanel sideBar;
+	private JButton notizenBtn;
+	private JButton kalenderBtn;
+
 	public MainFrame() {
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocation(300, 200);
+
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		createWidgets();
+		addWidgets();
+		setupInteractions();
+
 		addWindowListener(new TrayListener(this));
-		setSize(800, 600);
-		//pack();
+
+		// setSize(800, 600);
+		pack();
+
 	}
 
+	public void createWidgets() {
+
+		mainView = new JPanel();
+		mainView.setLayout(mainLayout);
+
+		mainViewNotizen = new JPanel();
+		mainViewNotizen.setLayout(new BoxLayout(mainViewNotizen, BoxLayout.Y_AXIS));
+
+		mainViewKalender = new JPanel();
+		mainViewKalender.setLayout(new BoxLayout(mainViewKalender, BoxLayout.Y_AXIS));
+
+		sideBar = new JPanel();
+		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
+
+		header = new JLabel("iRemember");
+		header.setHorizontalAlignment(SwingConstants.CENTER);
+		header.setFont(header.getFont().deriveFont(Font.BOLD + Font.ITALIC, 30));
+		header.setOpaque(true);
+		header.setBackground(Color.BLACK);
+		header.setForeground(Color.WHITE);
+
+		notizenBtn = new JButton("Notizen");
+		notizenBtn.setHorizontalAlignment(SwingConstants.CENTER);
+		notizenBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
+		notizenBtn.setForeground(Color.GREEN);
+
+		kalenderBtn = new JButton("Kalender");
+		kalenderBtn.setHorizontalAlignment(SwingConstants.CENTER);
+		kalenderBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
+		kalenderBtn.setForeground(Color.GREEN);
+
+		notizenTop = new JPanel();
+		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
+
+		notizenListe = new JList<Notiz>();
+
+		einlesenProgBar = new JProgressBar(0,100);
+
+		filter = new JTextField();
+
+		sortierung = new JComboBox<String>(new String[] {"nach neu", "nach alt"});
+		
+		notizenBottom = new JPanel();
+
+	}
+
+	public void addWidgets() {
+
+		getContentPane().add(BorderLayout.PAGE_START, header);
+		getContentPane().add(BorderLayout.CENTER, mainView);
+		getContentPane().add(BorderLayout.WEST, sideBar);
+
+		sideBar.add(notizenBtn);
+		sideBar.add(kalenderBtn);
+		
+		mainView.add(mainViewNotizen, "notizen");
+		mainView.add(mainViewKalender, "kalender");
+
+		mainViewNotizen.add(notizenTop);
+		mainViewNotizen.add(notizenListe);
+		mainViewNotizen.add(einlesenProgBar);
+		mainViewNotizen.add(notizenBottom);
+
+		notizenTop.add(filter);
+		notizenTop.add(sortierung);
+
+	}
+	
+	public void setupInteractions() {
+		notizenBtn.addActionListener(new notizen÷ffnen());
+		kalenderBtn.addActionListener(new kalender÷ffnen());
+	}
+	
+	//Listener
+	
+	public class notizen÷ffnen implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mainLayout.show(mainView, "notizen");	
+		}
+		
+	}
+	
+	public class kalender÷ffnen implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			mainLayout.show(mainView, "kalender");	
+		}
+		
+	}
+	
+	
+	// Tray-Funktion
 	private class TrayListener extends WindowAdapter {
 
 		JFrame frame;
 
 		@Override
 		public void windowClosing(WindowEvent e) {
+
 			frame.dispose();
 			SystemTray systemTray = SystemTray.getSystemTray();
-	Image pic = null;
+			Image pic = null;
 			PopupMenu popup = new PopupMenu();
 			MenuItem defaultItem = new MenuItem("iRemember anzeigen");
 			MenuItem exitItem = new MenuItem("Remember beenden");
-			defaultItem.addActionListener(new TrayActionListener(frame));
+
 			exitItem.addActionListener(new ExitTrayListener());
 
 			try {
@@ -61,6 +199,7 @@ public class MainFrame extends JFrame {
 			popup.add(defaultItem);
 			popup.add(exitItem);
 			TrayIcon icon = new TrayIcon(pic, "÷ffen...", popup);
+			defaultItem.addActionListener(new TrayActionListener(frame, systemTray, icon));
 
 			try {
 				systemTray.add(icon);
@@ -78,15 +217,20 @@ public class MainFrame extends JFrame {
 	private class TrayActionListener implements ActionListener {
 
 		JFrame frame;
+		SystemTray st;
+		TrayIcon icon;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			frame.setVisible(true);
+			st.remove(icon);
 		}
 
-		public TrayActionListener(JFrame f) {
+		public TrayActionListener(JFrame f, SystemTray st, TrayIcon icon) {
 			frame = f;
+			this.st = st;
+			this.icon = icon;
 		}
 	}
 
@@ -95,7 +239,17 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			@SuppressWarnings("unused")
+			FileWriter fw;
+			try {
+				fw = new FileWriter(Main.datei);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			System.exit(0);
+
 		}
 
 	}
