@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 
@@ -15,12 +16,29 @@ public class MonatsFeld extends JPanel {
 	
 	public MonatsFeld() {
 
-		setLayout(new GridLayout(7, 5, 5, 5));
-
+		setLayout(new GridLayout(6, 7, 5, 5));
+		
 		createWidgets();
+		addWidgets();
 
+
+	
+		
 	}
 
+	public void addWidgets() {
+		for(int i=0; i<datumFeld.length; i++) {
+			for(int j=0; j<datumFeld[i].length; j++) {
+				if(!(datumFeld[i][j]==null)) {
+					add(datumFeld[i][j]);
+				}else {
+					add(new JButton()).setEnabled(false);
+				}
+				
+			}
+		}
+	}
+	
 	public void createWidgets() {
 		
 		String monat;
@@ -93,7 +111,8 @@ public class MonatsFeld extends JPanel {
 		
 		for(int j = cal2.get(Calendar.DAY_OF_WEEK); j<7; j++) {
 			datumFeld[0][j] = new DatumFeld(tag);
-			System.out.println(tag);
+//			add(new DatumFeld(tag));
+//			System.out.println(tag);
 			tag++;
 			
 		}
@@ -101,7 +120,7 @@ public class MonatsFeld extends JPanel {
 		for(int i = 1; i<6; i++) {
 			for(int j = 0; j<7; j++) {
 				datumFeld[i][j] = new DatumFeld(tag);
-				System.out.println(tag);
+//				System.out.println(tag);
 				if(tag >= anzTage) {
 					return;
 				}
