@@ -10,7 +10,7 @@ public class DatumFeld extends JPanel {
 	private JButton anzeige;
 	private int monatsTag;
 
-	public DatumFeld(int montasTag) {
+	public DatumFeld(int monatsTag) {
 
 		setLayout(new BorderLayout(5, 5));
 		
