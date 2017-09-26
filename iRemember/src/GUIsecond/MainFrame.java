@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import DataStructures.Notiz;
+import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
@@ -52,10 +53,12 @@ public class MainFrame extends JFrame {
 	// TODO Bearbeiten und Erstellen
 
 	private JPanel mainViewKalender;
+	private MonatsFeld kalender;
 
 	private JPanel sideBar;
 	private JButton notizenBtn;
 	private JButton kalenderBtn;
+	private JLabel status;
 	private JButton beenden;
 
 	public MainFrame() {
@@ -126,6 +129,10 @@ public class MainFrame extends JFrame {
 		notizenBottom = new JPanel();
 		
 		beenden = new JButton("Exit");
+		
+		status = new JLabel("Status");
+		
+		kalender = new MonatsFeld();
 	}
 
 	public void addWidgets() {
@@ -137,6 +144,7 @@ public class MainFrame extends JFrame {
 		sideBar.add(notizenBtn);
 		sideBar.add(kalenderBtn);
 		sideBar.add(Box.createVerticalGlue());
+		sideBar.add(status);
 		sideBar.add(beenden);
 		
 		mainView.add(mainViewNotizen, "notizen");
@@ -149,6 +157,8 @@ public class MainFrame extends JFrame {
 
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
+		
+		mainViewKalender.add(kalender);
 
 	}
 	
