@@ -51,6 +51,7 @@ public class Main {
 		try {
 			br = new BufferedReader(new FileReader(datei));
 			String text = br.readLine();
+			System.out.println(text);
 			if (text == null) {
 				MainFrame frame = new MainFrame();
 				frame.setVisible(true);
@@ -59,7 +60,6 @@ public class Main {
 				fw.write("started");
 				fw.flush();
 				fw.close();
-
 			} else {
 				System.exit(-1);
 			}
