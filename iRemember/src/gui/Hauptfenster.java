@@ -17,12 +17,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+public class Hauptfenster extends JFrame {
 
-
-
-
-public class Hauptfenster extends JFrame{
-	
 	public Hauptfenster() {
 		setLayout(new BorderLayout());
 		setTitle("iRemember");
@@ -36,70 +32,69 @@ public class Hauptfenster extends JFrame{
 		}
 		addWindowListener(new TrayListener(this));
 		setSize(800, 600);
-		//pack();
+		// pack();
 	}
-		
-		 class TrayListener extends WindowAdapter {
 
-			JFrame frame;
+	private class TrayListener extends WindowAdapter {
 
-			@Override
-			public void windowClosing(WindowEvent e) {
-				frame.dispose();
-				SystemTray systemTray = SystemTray.getSystemTray();
-		Image pic = null;
-				PopupMenu popup = new PopupMenu();
-				MenuItem defaultItem = new MenuItem("iRemember anzeigen");
-				MenuItem exitItem = new MenuItem("Remember beenden");
-				defaultItem.addActionListener(new TrayActionListener(frame));
-				exitItem.addActionListener(new ExitTrayListener());
+		JFrame frame;
 
-				try {
-					pic = ImageIO.read(Hauptfenster.class.getClassLoader().getResourceAsStream("gui/Icon.png"));
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
-				popup.add(defaultItem);
-				popup.add(exitItem);
-				TrayIcon icon = new TrayIcon(pic, "Öffen...", popup);
+		@Override
+		public void windowClosing(WindowEvent e) {
+			frame.dispose();
+			SystemTray systemTray = SystemTray.getSystemTray();
+			Image pic = null;
+			PopupMenu popup = new PopupMenu();
+			MenuItem defaultItem = new MenuItem("iRemember anzeigen");
+			MenuItem exitItem = new MenuItem("Remember beenden");
+			defaultItem.addActionListener(new TrayActionListener(frame));
+			exitItem.addActionListener(new ExitTrayListener());
 
-				try {
-					systemTray.add(icon);
-				} catch (AWTException awtException) {
-					awtException.printStackTrace();
-				}
+			try {
+				pic = ImageIO.read(Hauptfenster.class.getClassLoader().getResourceAsStream("gui/Icon.png"));
+			} catch (IOException e1) {
 
+				e1.printStackTrace();
+			}
+			popup.add(defaultItem);
+			popup.add(exitItem);
+			TrayIcon icon = new TrayIcon(pic, "Öffen...", popup);
+
+			try {
+				systemTray.add(icon);
+			} catch (AWTException awtException) {
+				awtException.printStackTrace();
 			}
 
-			public TrayListener(JFrame frame) {
-				this.frame = frame;
-			}
 		}
 
-		class TrayActionListener implements ActionListener {
+		public TrayListener(JFrame frame) {
+			this.frame = frame;
+		}
+	}
 
-			JFrame frame;
+	private class TrayActionListener implements ActionListener {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		JFrame frame;
 
-				frame.setVisible(true);
-			}
+		@Override
+		public void actionPerformed(ActionEvent e) {
 
-			public TrayActionListener(JFrame f) {
-				frame = f;
-			}
+			frame.setVisible(true);
 		}
 
-		class ExitTrayListener implements ActionListener {
+		public TrayActionListener(JFrame f) {
+			frame = f;
+		}
+	}
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.exit(0);
-			}
+	private class ExitTrayListener implements ActionListener {
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			System.exit(0);
 		}
 
 	}
+}
