@@ -44,18 +44,32 @@ public class MainFrame extends JFrame {
 	private JPanel mainView;
 
 	private JPanel mainViewNotizen;
+	
 	private JPanel notizenTop;
 	private JTextField filter;
 	private JComboBox<String> sortierung;
+	
 	private JList<Notiz> notizenListe;
+	
 	private JProgressBar einlesenProgBar;
+	
 	private JPanel notizenBottom;
+	
+	private JButton erstellen;
+	
+	private JTextField notizEingabe;
+	
+	private JPanel untereKnoepfe;
+	private JButton speichern;
+	private JButton loeschen;
+	private JButton abbrechen;
+	
 	// TODO Bearbeiten und Erstellen
 
 	private JPanel mainViewKalender;
 	private MonatsFeld kalender;
 	private JComboBox<Integer> jahre;
-	private JComboBox monate;
+	private JComboBox<String> monate;
 
 	private JPanel sideBar;
 	private JButton notizenBtn;
@@ -129,6 +143,7 @@ public class MainFrame extends JFrame {
 		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
 
 		notizenBottom = new JPanel();
+		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
 
 		beenden = new JButton("Exit");
 
@@ -140,6 +155,16 @@ public class MainFrame extends JFrame {
 
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
 				"August", "September", "Oktober", "November", "Dezember" });
+		
+		erstellen = new JButton("Erstellen");
+		
+		notizEingabe = new JTextField();
+		
+		untereKnoepfe = new JPanel();
+		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
+		speichern = new JButton("Speichern");
+		loeschen = new JButton("Löschen");
+		abbrechen = new JButton("Abbrechen");
 	}
 
 	public void addWidgets() {
@@ -168,6 +193,14 @@ public class MainFrame extends JFrame {
 		mainViewKalender.add(jahre);
 		mainViewKalender.add(monate);
 		mainViewKalender.add(kalender);
+		
+		notizenBottom.add(erstellen);
+		notizenBottom.add(notizEingabe);
+		notizenBottom.add(untereKnoepfe);
+		
+		untereKnoepfe.add(speichern);
+		untereKnoepfe.add(loeschen);
+		untereKnoepfe.add(abbrechen);
 
 	}
 
