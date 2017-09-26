@@ -11,7 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
 		}
 		addWindowListener(new TrayListener(this));
 		setSize(800, 600);
-		//pack();
+		// pack();
 	}
 
 	private class TrayListener extends WindowAdapter {
@@ -43,13 +43,14 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void windowClosing(WindowEvent e) {
+
 			frame.dispose();
 			SystemTray systemTray = SystemTray.getSystemTray();
-	Image pic = null;
+			Image pic = null;
 			PopupMenu popup = new PopupMenu();
 			MenuItem defaultItem = new MenuItem("iRemember anzeigen");
 			MenuItem exitItem = new MenuItem("Remember beenden");
-			defaultItem.addActionListener(new TrayActionListener(frame));
+
 			exitItem.addActionListener(new ExitTrayListener());
 
 			try {
@@ -61,6 +62,7 @@ public class MainFrame extends JFrame {
 			popup.add(defaultItem);
 			popup.add(exitItem);
 			TrayIcon icon = new TrayIcon(pic, "Öffen...", popup);
+			defaultItem.addActionListener(new TrayActionListener(frame, systemTray, icon));
 
 			try {
 				systemTray.add(icon);
@@ -78,15 +80,20 @@ public class MainFrame extends JFrame {
 	private class TrayActionListener implements ActionListener {
 
 		JFrame frame;
+		SystemTray st;
+		TrayIcon icon;
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			frame.setVisible(true);
+			st.remove(icon);
 		}
 
-		public TrayActionListener(JFrame f) {
+		public TrayActionListener(JFrame f, SystemTray st, TrayIcon icon) {
 			frame = f;
+			this.st = st;
+			this.icon = icon;
 		}
 	}
 
@@ -95,7 +102,17 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			@SuppressWarnings("unused")
+			FileWriter fw;
+			try {
+				fw = new FileWriter(Main.datei);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			System.exit(0);
+
 		}
 
 	}
