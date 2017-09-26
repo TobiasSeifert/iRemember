@@ -21,7 +21,7 @@ public class Demo {
 			}
 		
 		JFrame frame = new Hauptfenster();
-				
+						
 		frame.setVisible(true);
 	
 	}
