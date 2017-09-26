@@ -1,7 +1,7 @@
 package gui;
 
 import java.awt.AWTException;
-import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -20,7 +20,7 @@ import javax.swing.WindowConstants;
 public class Hauptfenster extends JFrame {
 
 	public Hauptfenster() {
-		setLayout(new BorderLayout());
+		setLayout(new FlowLayout());
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocation(300, 200);
@@ -94,7 +94,7 @@ public class Hauptfenster extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			System.exit(0);
-		}
+	}
 
 	}
 }
