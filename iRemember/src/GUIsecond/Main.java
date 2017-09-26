@@ -8,10 +8,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				
+
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 				} catch (ClassNotFoundException e) {
@@ -29,10 +29,10 @@ public class Main {
 				}
 				MainFrame frame = new MainFrame();
 				frame.setVisible(true);
-				
+
 			}
 		});
 
 	}
-
+	
 }

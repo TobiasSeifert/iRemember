@@ -17,6 +17,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+@SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
 	public MainFrame() {
