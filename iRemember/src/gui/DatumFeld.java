@@ -11,7 +11,7 @@ public class DatumFeld extends JPanel {
 	private int monatsTag;
 
 	public DatumFeld(int monatsTag) {
-
+		this.monatsTag = monatsTag;
 		setLayout(new BorderLayout(5, 5));
 		
 		createWidgets();
