@@ -1,3 +1,6 @@
 /Hauptfenster.class
 /DatumFeld.class
 /MonatsFeld.class
+/Hauptfenster$ExitTrayListener.class
+/Hauptfenster$TrayActionListener.class
+/Hauptfenster$TrayListener.class
