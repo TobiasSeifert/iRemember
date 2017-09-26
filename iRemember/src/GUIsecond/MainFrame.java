@@ -55,12 +55,10 @@ public class MainFrame extends JFrame {
 	
 	private JPanel notizenBottom;
 	
-	private JButton erstellen;
-	
 	private JTextField notizEingabe;
 	
 	private JPanel untereKnoepfe;
-	private JButton speichern;
+	private JButton erstellen;
 	private JButton loeschen;
 	private JButton abbrechen;
 	
@@ -155,14 +153,12 @@ public class MainFrame extends JFrame {
 
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "M‰rz", "April", "Mai", "Juni", "Juli",
 				"August", "September", "Oktober", "November", "Dezember" });
-		
-		erstellen = new JButton("Erstellen");
-		
+
 		notizEingabe = new JTextField();
 		
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
-		speichern = new JButton("Speichern");
+		erstellen = new JButton("Erstellen");
 		loeschen = new JButton("Lˆschen");
 		abbrechen = new JButton("Abbrechen");
 	}
@@ -194,11 +190,10 @@ public class MainFrame extends JFrame {
 		mainViewKalender.add(monate);
 		mainViewKalender.add(kalender);
 		
-		notizenBottom.add(erstellen);
 		notizenBottom.add(notizEingabe);
 		notizenBottom.add(untereKnoepfe);
 		
-		untereKnoepfe.add(speichern);
+		untereKnoepfe.add(erstellen);
 		untereKnoepfe.add(loeschen);
 		untereKnoepfe.add(abbrechen);
 
@@ -208,9 +203,27 @@ public class MainFrame extends JFrame {
 		notizenBtn.addActionListener(new notizen÷ffnen());
 		kalenderBtn.addActionListener(new kalender÷ffnen());
 		beenden.addActionListener(new beenden());
+		erstellen.addActionListener(new erstellen_speichern());
 	}
 
 	// Listener
+	
+	public class erstellen_speichern implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(erstellen.getText().equals("Erstellen")) {
+				System.out.println(erstellen.getText());
+				erstellen.setText("Speichern");
+				erstellen.updateUI();
+				System.out.println(erstellen.getText());
+			}else if(erstellen.getText().equals("Speichern")) {
+				erstellen.setText("Erstellen");
+			}
+			
+		}
+		
+	}
 
 	public class notizen÷ffnen implements ActionListener {
 
