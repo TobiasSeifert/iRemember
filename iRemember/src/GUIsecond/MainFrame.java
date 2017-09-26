@@ -2,6 +2,7 @@ package GUIsecond;
 
 import java.awt.AWTException;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -24,10 +25,16 @@ public class MainFrame extends JFrame {
 		setLayout(new FlowLayout());
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setLocationRelativeTo(null);
+		setLocation(300, 200);
+		try {
+			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		addWindowListener(new TrayListener(this));
-
-		pack();
+		setSize(800, 600);
+		//pack();
 	}
 
 	private class TrayListener extends WindowAdapter {
@@ -38,7 +45,7 @@ public class MainFrame extends JFrame {
 		public void windowClosing(WindowEvent e) {
 			frame.dispose();
 			SystemTray systemTray = SystemTray.getSystemTray();
-			BufferedImage pic = null;
+	Image pic = null;
 			PopupMenu popup = new PopupMenu();
 			MenuItem defaultItem = new MenuItem("iRemember anzeigen");
 			MenuItem exitItem = new MenuItem("Remember beenden");
@@ -46,7 +53,7 @@ public class MainFrame extends JFrame {
 			exitItem.addActionListener(new ExitTrayListener());
 
 			try {
-				pic = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/Dough2.jpg"));
+				pic = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png"));
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
