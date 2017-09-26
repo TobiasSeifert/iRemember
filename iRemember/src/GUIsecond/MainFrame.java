@@ -54,6 +54,8 @@ public class MainFrame extends JFrame {
 
 	private JPanel mainViewKalender;
 	private MonatsFeld kalender;
+	private JComboBox<Integer> jahre;
+	private JComboBox monate;
 
 	private JPanel sideBar;
 	private JButton notizenBtn;
@@ -120,19 +122,24 @@ public class MainFrame extends JFrame {
 
 		notizenListe = new JList<Notiz>();
 
-		einlesenProgBar = new JProgressBar(0,100);
+		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
 
-		sortierung = new JComboBox<String>(new String[] {"nach neu", "nach alt"});
-		
+		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
+
 		notizenBottom = new JPanel();
-		
+
 		beenden = new JButton("Exit");
-		
+
 		status = new JLabel("Status");
-		
+
 		kalender = new MonatsFeld();
+
+		jahre = new JComboBox<Integer>(new Integer[] { 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 });
+
+		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "M‰rz", "April", "Mai", "Juni", "Juli",
+				"August", "September", "Oktober", "November", "Dezember" });
 	}
 
 	public void addWidgets() {
@@ -146,7 +153,7 @@ public class MainFrame extends JFrame {
 		sideBar.add(Box.createVerticalGlue());
 		sideBar.add(status);
 		sideBar.add(beenden);
-		
+
 		mainView.add(mainViewNotizen, "notizen");
 		mainView.add(mainViewKalender, "kalender");
 
@@ -158,46 +165,55 @@ public class MainFrame extends JFrame {
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
 		
+		mainViewKalender.add(jahre);
+		mainViewKalender.add(monate);
 		mainViewKalender.add(kalender);
 
 	}
-	
+
 	public void setupInteractions() {
 		notizenBtn.addActionListener(new notizen÷ffnen());
 		kalenderBtn.addActionListener(new kalender÷ffnen());
 		beenden.addActionListener(new beenden());
 	}
-	
-	//Listener
-	
-	public class notizen÷ffnen implements ActionListener{
+
+	// Listener
+
+	public class notizen÷ffnen implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mainLayout.show(mainView, "notizen");	
+			mainLayout.show(mainView, "notizen");
 		}
-		
+
 	}
-	
-	public class kalender÷ffnen implements ActionListener{
+
+	public class kalender÷ffnen implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			mainLayout.show(mainView, "kalender");	
+			mainLayout.show(mainView, "kalender");
 		}
-		
+
 	}
-	
-	public class beenden implements ActionListener{
+
+	public class beenden implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(-2);	
+			@SuppressWarnings("unused")
+			FileWriter fw;
+			try {
+				fw = new FileWriter(Main.datei);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.exit(-2);
 		}
-		
+
 	}
-	
-	
+
 	// Tray-Funktion
 	private class TrayListener extends WindowAdapter {
 
