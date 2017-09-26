@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -35,7 +36,7 @@ import DataStructures.Notiz;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 
-	private CardLayout mainLayout;
+	private CardLayout mainLayout = new CardLayout();
 
 	private JLabel header;
 
@@ -55,6 +56,7 @@ public class MainFrame extends JFrame {
 	private JPanel sideBar;
 	private JButton notizenBtn;
 	private JButton kalenderBtn;
+	private JButton beenden;
 
 	public MainFrame() {
 		setLayout(new BorderLayout(5, 5));
@@ -122,7 +124,8 @@ public class MainFrame extends JFrame {
 		sortierung = new JComboBox<String>(new String[] {"nach neu", "nach alt"});
 		
 		notizenBottom = new JPanel();
-
+		
+		beenden = new JButton("Exit");
 	}
 
 	public void addWidgets() {
@@ -133,6 +136,8 @@ public class MainFrame extends JFrame {
 
 		sideBar.add(notizenBtn);
 		sideBar.add(kalenderBtn);
+		sideBar.add(Box.createVerticalGlue());
+		sideBar.add(beenden);
 		
 		mainView.add(mainViewNotizen, "notizen");
 		mainView.add(mainViewKalender, "kalender");
@@ -150,6 +155,7 @@ public class MainFrame extends JFrame {
 	public void setupInteractions() {
 		notizenBtn.addActionListener(new notizen÷ffnen());
 		kalenderBtn.addActionListener(new kalender÷ffnen());
+		beenden.addActionListener(new beenden());
 	}
 	
 	//Listener
@@ -168,6 +174,15 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainLayout.show(mainView, "kalender");	
+		}
+		
+	}
+	
+	public class beenden implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			System.exit(-2);	
 		}
 		
 	}
