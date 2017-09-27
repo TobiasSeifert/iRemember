@@ -20,6 +20,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,15 +28,22 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import DataStructures.Notiz;
+import DataStructures.NotizListRenderer;
+import DataStructures.NotizListe;
 import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
+	
+	private NotizListe<Notiz> notizListe = new NotizListe<Notiz>();
+	
+	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
 	private CardLayout mainLayout = new CardLayout();
 
@@ -44,24 +52,25 @@ public class MainFrame extends JFrame {
 	private JPanel mainView;
 
 	private JPanel mainViewNotizen;
-	
+
 	private JPanel notizenTop;
 	private JTextField filter;
 	private JComboBox<String> sortierung;
 	
-	private JList<Notiz> notizenListe;
-	
+	private JScrollPane notizScrollBar;
+	private JList<Notiz> notizAnzeige;
+
 	private JProgressBar einlesenProgBar;
-	
+
 	private JPanel notizenBottom;
-	
+
 	private JTextField notizEingabe;
-	
+
 	private JPanel untereKnoepfe;
 	private JButton erstellen;
 	private JButton loeschen;
 	private JButton abbrechen;
-	
+
 	// TODO Bearbeiten und Erstellen
 
 	private JPanel mainViewKalender;
@@ -76,6 +85,7 @@ public class MainFrame extends JFrame {
 	private JButton beenden;
 
 	public MainFrame() {
+
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -132,8 +142,6 @@ public class MainFrame extends JFrame {
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
 
-		notizenListe = new JList<Notiz>();
-
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
@@ -155,12 +163,20 @@ public class MainFrame extends JFrame {
 				"August", "September", "Oktober", "November", "Dezember" });
 
 		notizEingabe = new JTextField();
-		
+		notizEingabe.setEnabled(false);
+
+		notizAnzeige = new JList<Notiz>();
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
 		erstellen = new JButton("Erstellen");
 		loeschen = new JButton("Löschen");
+		loeschen.setEnabled(false);
 		abbrechen = new JButton("Abbrechen");
+		abbrechen.setEnabled(false);
+		
+		notizScrollBar = new JScrollPane(notizAnzeige);
 	}
 
 	public void addWidgets() {
@@ -179,20 +195,20 @@ public class MainFrame extends JFrame {
 		mainView.add(mainViewKalender, "kalender");
 
 		mainViewNotizen.add(notizenTop);
-		mainViewNotizen.add(notizenListe);
+		mainViewNotizen.add(notizScrollBar);
 		mainViewNotizen.add(einlesenProgBar);
 		mainViewNotizen.add(notizenBottom);
 
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
-		
+
 		mainViewKalender.add(jahre);
 		mainViewKalender.add(monate);
 		mainViewKalender.add(kalender);
-		
+
 		notizenBottom.add(notizEingabe);
 		notizenBottom.add(untereKnoepfe);
-		
+
 		untereKnoepfe.add(erstellen);
 		untereKnoepfe.add(loeschen);
 		untereKnoepfe.add(abbrechen);
@@ -204,25 +220,61 @@ public class MainFrame extends JFrame {
 		kalenderBtn.addActionListener(new kalenderÖffnen());
 		beenden.addActionListener(new beenden());
 		erstellen.addActionListener(new erstellen_speichern());
+		erstellen.addActionListener(new notizErstellen());
+	}
+	
+	public void notizenEinfügen() {
+		
+		listModel.clear();
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+		for(int i = 0; i < notizListe.size(); i++) {
+			listModel.addElement(notizListe.get(i));
+		}
+		notizAnzeige.setModel(listModel);
 	}
 
 	// Listener
-	
-	public class erstellen_speichern implements ActionListener{
+
+	public class notizErstellen implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(erstellen.getText().equals("Erstellen")) {
+			if (erstellen.getText().equals("Erstellen")) {
+				loeschen.setEnabled(true);
+				abbrechen.setEnabled(true);
+				notizEingabe.setEnabled(true);
+			} else if (erstellen.getText().equals("Speichern")) {
+				String text = notizEingabe.getText();
+				if (!text.trim().equals("")) {
+					Notiz n = new Notiz(text.trim());
+					System.out.println(text);
+					notizListe.add(n);
+					notizenEinfügen();
+					loeschen.setEnabled(false);
+					abbrechen.setEnabled(false);
+					notizEingabe.setText("");
+					notizEingabe.setEnabled(false);
+				}
+			}
+
+		}
+
+	}
+
+	public class erstellen_speichern implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (erstellen.getText().equals("Erstellen")) {
 				System.out.println(erstellen.getText());
 				erstellen.setText("Speichern");
-				erstellen.updateUI();
 				System.out.println(erstellen.getText());
-			}else if(erstellen.getText().equals("Speichern")) {
+			} else if (erstellen.getText().equals("Speichern")) {
 				erstellen.setText("Erstellen");
 			}
-			
+
 		}
-		
+
 	}
 
 	public class notizenÖffnen implements ActionListener {
