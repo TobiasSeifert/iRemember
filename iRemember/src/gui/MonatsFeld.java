@@ -15,25 +15,30 @@ import javax.swing.SwingConstants;
 
 public class MonatsFeld extends JPanel {
 	
-	private GregorianCalendar cal;
+	private GregorianCalendar heute = new GregorianCalendar();
 	private DatumFeld[][] datumFeld = new DatumFeld[6][7];
+	private int tag;
 	private int monat;
 	private int jahr;
+	private GregorianCalendar cal;
 	private String[] wochentage = {"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"};
 	private JLabel txt;
+		
 	
+//	public MonatsFeld() {
+//		cal = new GregorianCalendar();
+//		setLayout(new GridLayout(7, 7, 5, 5));
+//		
+//		createWidgets();
+//		addWidgets();		
+//	}
 	
 	public MonatsFeld() {
-		cal = new GregorianCalendar();
-		setLayout(new GridLayout(7, 7, 5, 5));
-		
-		createWidgets();
-		addWidgets();		
-	}
-	
-	public MonatsFeld(String monat) {
-		this.monat = getMonth(monat);
-		cal = new GregorianCalendar(2017, this.monat, Calendar.DAY_OF_MONTH);
+		this.tag =  heute.get(Calendar.DAY_OF_MONTH);
+		this.monat = monat = heute.get(Calendar.MONTH);
+		this.jahr = heute.get(Calendar.YEAR);
+		this.cal = new GregorianCalendar(2018,0,1);
+		cal.set(jahr,  monat, tag);
 		setLayout(new GridLayout(7, 7, 5, 5));
 		
 		createWidgets();
@@ -49,9 +54,7 @@ public class MonatsFeld extends JPanel {
 		createWidgets();
 		addWidgets();		
 	}
-	
-
-	
+		
 	public void addWidgets() {
 		for(int i=0; i<datumFeld.length; i++) {
 			for(int j=0; j<datumFeld[i].length; j++) {
@@ -171,8 +174,8 @@ public class MonatsFeld extends JPanel {
 //		cal2.setFirstDayOfWeek(Calendar.SUNDAY);
 		
 		int tag = 1;
-		System.out.println(getWeekDay(cal2));
-		System.out.println(cal2.get(GregorianCalendar.DAY_OF_WEEK));
+//		System.out.println(getWeekDay(cal2));
+//		System.out.println(cal2.get(GregorianCalendar.DAY_OF_WEEK));
 		
 		
 		if(cal2.get(Calendar.DAY_OF_WEEK) == 1) {
@@ -182,7 +185,7 @@ public class MonatsFeld extends JPanel {
 				for(int j = 0; j<7; j++) {
 					datumFeld[i][j] = new DatumFeld(tag);
 					
-					System.out.println(j);
+//					System.out.println(j);
 					if(tag >= anzTage) {
 						return;
 					}
@@ -195,7 +198,7 @@ public class MonatsFeld extends JPanel {
 				for(int j = 0; j<7; j++) {
 					datumFeld[i][j] = new DatumFeld(tag);
 					
-					System.out.println(j);
+//					System.out.println(j);
 					if(tag >= anzTage) {
 						return;
 					}
@@ -205,7 +208,7 @@ public class MonatsFeld extends JPanel {
 			}
 		}else {
 			for(int j = cal2.get(Calendar.DAY_OF_WEEK)-2; j<7; j++) {
-				System.out.println(j);
+//				System.out.println(j);
 				datumFeld[0][j] = new DatumFeld(tag);
 				tag++;
 				
@@ -214,7 +217,7 @@ public class MonatsFeld extends JPanel {
 			for(int i = 1; i<6; i++) {
 				for(int j = 0; j<7; j++) {
 					datumFeld[i][j] = new DatumFeld(tag);
-					System.out.println(j);
+//					System.out.println(j);
 					if(tag >= anzTage) {
 						return;
 					}
@@ -223,5 +226,15 @@ public class MonatsFeld extends JPanel {
 				}
 			}
 		}	
+	}
+
+	public void setMonat(String monat) {
+		this.monat = getMonth(monat);
+		cal.set(this.jahr, this.monat, tag);
+	}
+
+	public void setJahr(int jahr) {
+		this.jahr = jahr;
+		cal.set(this.jahr, this.monat, tag);
 	}
 }

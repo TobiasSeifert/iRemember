@@ -18,6 +18,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -162,9 +164,12 @@ public class MainFrame extends JFrame {
 		kalender = new MonatsFeld();
 
 		jahre = new JComboBox<Integer>(new Integer[] { 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 });
-
+		jahre.setSelectedItem(new GregorianCalendar().get(Calendar.YEAR));
+		
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
 				"August", "September", "Oktober", "November", "Dezember" });
+		
+		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
 		notizEingabe = new JTextField();
 		notizEingabe.setEnabled(false);
@@ -228,6 +233,9 @@ public class MainFrame extends JFrame {
 		notizAnzeige.addMouseListener(new notizAnwaehlen());
 		loeschen.addActionListener(new notizLöschen());
 		abbrechen.addActionListener(new notizAbbrechen());
+		monate.addActionListener(new monthDropDownListener());
+		jahre.addActionListener(new monthDropDownListener());
+		
 	}
 
 	// Listener
@@ -456,4 +464,28 @@ public class MainFrame extends JFrame {
 		}
 
 	}
+	
+	private class monthDropDownListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			String monat = (String) monate.getSelectedItem();
+			int jahr = (int)jahre.getSelectedItem();
+			System.out.println(monat);
+			System.out.println(jahr);
+			mainViewKalender.remove(kalender);
+			kalender = new MonatsFeld(monat, jahr);
+//			kalender.createWidgets();
+//			kalender.addWidgets();
+//			kalender.validate();
+//			kalender.repaint();
+//			kalender.getM
+			mainViewKalender.add(kalender);
+			mainLayout.show(mainView, "notizen");
+			mainLayout.show(mainView, "kalender");
+		}
+		
+	}
+	
 }
