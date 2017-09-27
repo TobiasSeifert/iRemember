@@ -58,7 +58,7 @@ public class Main {
 		SIA = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
 		properties = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Properties.txt");
 
-		if (dir.exists() && SIA.exists()) {
+		if (dir.exists() && SIA.exists() && properties.exists()) {
 			createData();
 		} else {
 			dir.mkdirs();
