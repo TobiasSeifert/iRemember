@@ -12,6 +12,8 @@ import java.awt.SystemTray;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.FileWriter;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -27,15 +30,24 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import DataStructures.Notiz;
+import DataStructures.NotizListRenderer;
+import DataStructures.NotizListe;
 import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
+
+	private int index;
+
+	private NotizListe<Notiz> notizListe = new NotizListe<Notiz>();
+
+	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
 	private CardLayout mainLayout = new CardLayout();
 
@@ -44,24 +56,25 @@ public class MainFrame extends JFrame {
 	private JPanel mainView;
 
 	private JPanel mainViewNotizen;
-	
+
 	private JPanel notizenTop;
 	private JTextField filter;
 	private JComboBox<String> sortierung;
-	
-	private JList<Notiz> notizenListe;
-	
+
+	private JScrollPane notizScrollBar;
+	private JList<Notiz> notizAnzeige;
+
 	private JProgressBar einlesenProgBar;
-	
+
 	private JPanel notizenBottom;
-	
+
 	private JTextField notizEingabe;
-	
+
 	private JPanel untereKnoepfe;
 	private JButton erstellen;
 	private JButton loeschen;
 	private JButton abbrechen;
-	
+
 	// TODO Bearbeiten und Erstellen
 
 	private JPanel mainViewKalender;
@@ -76,6 +89,7 @@ public class MainFrame extends JFrame {
 	private JButton beenden;
 
 	public MainFrame() {
+
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -132,8 +146,6 @@ public class MainFrame extends JFrame {
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
 
-		notizenListe = new JList<Notiz>();
-
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
@@ -155,12 +167,21 @@ public class MainFrame extends JFrame {
 				"August", "September", "Oktober", "November", "Dezember" });
 
 		notizEingabe = new JTextField();
-		
+		notizEingabe.setEnabled(false);
+
+		notizAnzeige = new JList<Notiz>();
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
 		erstellen = new JButton("Erstellen");
+		erstellen.setName("Erstellen");
 		loeschen = new JButton("Löschen");
+		loeschen.setEnabled(false);
 		abbrechen = new JButton("Abbrechen");
+		abbrechen.setEnabled(false);
+
+		notizScrollBar = new JScrollPane(notizAnzeige);
 	}
 
 	public void addWidgets() {
@@ -179,20 +200,20 @@ public class MainFrame extends JFrame {
 		mainView.add(mainViewKalender, "kalender");
 
 		mainViewNotizen.add(notizenTop);
-		mainViewNotizen.add(notizenListe);
+		mainViewNotizen.add(notizScrollBar);
 		mainViewNotizen.add(einlesenProgBar);
 		mainViewNotizen.add(notizenBottom);
 
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
-		
+
 		mainViewKalender.add(jahre);
 		mainViewKalender.add(monate);
 		mainViewKalender.add(kalender);
-		
+
 		notizenBottom.add(notizEingabe);
 		notizenBottom.add(untereKnoepfe);
-		
+
 		untereKnoepfe.add(erstellen);
 		untereKnoepfe.add(loeschen);
 		untereKnoepfe.add(abbrechen);
@@ -203,26 +224,121 @@ public class MainFrame extends JFrame {
 		notizenBtn.addActionListener(new notizenÖffnen());
 		kalenderBtn.addActionListener(new kalenderÖffnen());
 		beenden.addActionListener(new beenden());
-		erstellen.addActionListener(new erstellen_speichern());
+		erstellen.addActionListener(new notizErstellen());
+		notizAnzeige.addMouseListener(new notizAnwaehlen());
+		loeschen.addActionListener(new notizLöschen());
+		abbrechen.addActionListener(new notizAbbrechen());
 	}
 
 	// Listener
+	public void notizenEinfügen() {
+
+		listModel.clear();
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+		for (int i = 0; i < notizListe.size(); i++) {
+			listModel.addElement(notizListe.get(i));
+		}
+		notizAnzeige.setModel(listModel);
+	}
+
+	public class notizAnwaehlen implements MouseListener {
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			index = notizAnzeige.locationToIndex(e.getPoint());
+			if (notizListe.get(index).getNotiz() != null) {
+				loeschen.setEnabled(true);
+				abbrechen.setEnabled(true);
+				notizEingabe.setEnabled(true);
+				erstellen.setText("Bearbeiten");
+				notizEingabe.setText(notizListe.get(index).getNotiz());
+			}
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+
+	}
 	
-	public class erstellen_speichern implements ActionListener{
+	public class notizLöschen implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(erstellen.getText().equals("Erstellen")) {
-				System.out.println(erstellen.getText());
-				erstellen.setText("Speichern");
-				erstellen.updateUI();
-				System.out.println(erstellen.getText());
-			}else if(erstellen.getText().equals("Speichern")) {
-				erstellen.setText("Erstellen");
-			}
-			
+			notizListe.remove(index);
+			notizenEinfügen();
+			notizEingabe.setText("");
+			notizEingabe.setEnabled(false);
+			loeschen.setEnabled(false);
+			abbrechen.setEnabled(false);
+			erstellen.setText("Erstellen");
 		}
 		
+	}
+	
+	public class notizAbbrechen implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			abbrechen.setEnabled(false);
+			loeschen.setEnabled(false);
+			notizEingabe.setEnabled(false);
+			notizEingabe.setText("");
+			erstellen.setText("Erstellen");
+		}
+		
+	}
+
+	public class notizErstellen implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (erstellen.getText().equals("Erstellen")) {
+				erstellen.setText("Speichern");
+				abbrechen.setEnabled(true);
+				notizEingabe.setEnabled(true);
+				System.out.println("Erstellen");
+			} else if (erstellen.getText().equals("Speichern")) {
+				erstellen.setText("Erstellen");
+				abbrechen.setEnabled(false);
+				notizEingabe.setEnabled(false);
+				
+				String text = notizEingabe.getText();
+				if (!text.trim().equals("")) {
+					Notiz n = new Notiz(text.trim());
+					System.out.println(text);
+					notizListe.add(n);
+					notizenEinfügen();
+					notizEingabe.setText("");
+					System.out.println("Speichern");
+				}
+			} else if (erstellen.getText().equals("Bearbeiten")) {
+				erstellen.setText("Erstellen");
+				loeschen.setEnabled(false);
+				abbrechen.setEnabled(false);
+				notizEingabe.setEnabled(false);
+				
+				String text2 = notizEingabe.getText();
+				if (!text2.trim().equals("")) {
+					notizListe.get(index).setNotiz(text2);
+					notizenEinfügen();
+					notizEingabe.setText("");
+				}
+			}
+
+		}
 	}
 
 	public class notizenÖffnen implements ActionListener {
@@ -340,5 +456,4 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-
 }

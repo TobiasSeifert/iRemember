@@ -11,6 +11,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import DataStructures.Notiz;
+import DataStructures.NotizListe;
+
 public class Main {
 
 	static FileWriter fw;
@@ -18,6 +21,7 @@ public class Main {
 	static File dir;
 
 	static BufferedReader br = null;
+	private NotizListe<Notiz> notizliste = new NotizListe<Notiz>();
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {

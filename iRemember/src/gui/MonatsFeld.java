@@ -1,11 +1,15 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 
 
@@ -15,37 +19,39 @@ public class MonatsFeld extends JPanel {
 	private DatumFeld[][] datumFeld = new DatumFeld[6][7];
 	private int monat;
 	private int jahr;
+	private String[] wochentage = {"Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"};
+	private JLabel txt;
+	
 	
 	public MonatsFeld() {
 		cal = new GregorianCalendar();
-		setLayout(new GridLayout(6, 7, 5, 5));
+		setLayout(new GridLayout(7, 7, 5, 5));
 		
 		createWidgets();
 		addWidgets();		
 	}
-	
 	
 	public MonatsFeld(String monat) {
 		this.monat = getMonth(monat);
 		cal = new GregorianCalendar(2017, this.monat, Calendar.DAY_OF_MONTH);
-		setLayout(new GridLayout(6, 7, 5, 5));
+		setLayout(new GridLayout(7, 7, 5, 5));
 		
 		createWidgets();
 		addWidgets();		
 	}
-	
 	
 	public MonatsFeld(String monat, int jahr) {
 		this.monat = getMonth(monat);
 		this.jahr = jahr;
 		cal = new GregorianCalendar(jahr, this.monat, Calendar.DAY_OF_MONTH);
-		setLayout(new GridLayout(6, 7, 5, 5));
+		setLayout(new GridLayout(7, 7, 5, 5));
 		
 		createWidgets();
 		addWidgets();		
 	}
 	
 
+	
 	public void addWidgets() {
 		for(int i=0; i<datumFeld.length; i++) {
 			for(int j=0; j<datumFeld[i].length; j++) {
@@ -54,22 +60,27 @@ public class MonatsFeld extends JPanel {
 				}else {
 					add(new JButton()).setEnabled(false);
 				}
-				
 			}
 		}
 	}
 	
 	public void createWidgets() {
 		
-//		String monat = getMonth(cal);
 		int monat_Zahl = cal.get(GregorianCalendar.MONTH);
 		
-//		int tage_Monat = cal.getActualMaximum(GregorianCalendar.MONTH);
 		int tage_Monat = cal.getActualMaximum(cal.DATE);
 		int tag_des_Monats = cal.get(GregorianCalendar.DAY_OF_MONTH);
-//		System.out.println(tage_Monat);
-		auffuellen(tage_Monat);
 		
+		for(int t=0; t<7; t++) {
+			txt = new JLabel();
+			txt.setText(wochentage[t]);
+			txt.setHorizontalAlignment(SwingConstants.CENTER);
+//			txt.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+			txt.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+			add(txt);
+		}
+		
+		auffuellen(tage_Monat);		
 	}
 	
 	public String getMonth(Calendar c) {
@@ -105,33 +116,33 @@ public class MonatsFeld extends JPanel {
 	
 	public int getMonth(String monat) {
 		switch(monat) {
-		case "Januar": return 0;
+			case "Januar": return 0;
+				
+			case "Februar": return 1;
+				
+			case "März": return 2;
+				
+			case "April": return 3;
+				
+			case "Mai": return 4;
+				
+			case "Juni": return 5;
+				
+			case "Juli": return 6;
+				
+			case "August": return 7;
+				
+			case "September": return 8;
+				
+			case "Oktober": return 9;
+				
+			case "November": return 10;
 			
-		case "Februar": return 1;
+			case "Dezember": return 11;
 			
-		case "März": return 2;
-			
-		case "April": return 3;
-			
-		case "Mai": return 4;
-			
-		case "Juni": return 5;
-			
-		case "Juli": return 6;
-			
-		case "August": return 7;
-			
-		case "September": return 8;
-			
-		case "Oktober": return 9;
-			
-		case "November": return 10;
+			default: return -1;
 		
-		case "Dezember": return 11;
-		
-		default: return -1;
-	
-	}
+		}
 	}
 	
 	public String getWeekDay(Calendar c) {
