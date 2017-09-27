@@ -65,8 +65,12 @@ public class Main {
 			try {
 				fw = new FileWriter(SIA);
 				fw.write("");
+				fw.flush();
+				fw.close();
 				fw = new FileWriter(properties);
 				fw.write("600" + System.lineSeparator() + "800");
+				fw.flush();
+				fw.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
