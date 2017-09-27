@@ -16,6 +16,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -88,8 +91,10 @@ public class MainFrame extends JFrame {
 	private JLabel status;
 	private JButton beenden;
 
-	public MainFrame() {
+	private int width, height;
 
+	public MainFrame() {
+		setHeight_Width();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -107,8 +112,26 @@ public class MainFrame extends JFrame {
 
 		addWindowListener(new TrayListener(this));
 
-		// setSize(800, 600);
-		pack();
+		setSize(height, width);
+		// pack();
+
+	}
+
+	private void setHeight_Width() {
+		try {
+			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
+			width = Integer.parseInt(bufr.readLine());
+			height = Integer.parseInt(bufr.readLine());
+
+			System.out.println(bufr.readLine());
+			System.out.println(bufr.readLine());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -223,7 +246,7 @@ public class MainFrame extends JFrame {
 	public void setupInteractions() {
 		notizenBtn.addActionListener(new notizenÖffnen());
 		kalenderBtn.addActionListener(new kalenderÖffnen());
-		beenden.addActionListener(new beenden());
+		beenden.addActionListener(new ExitTrayListener());
 		erstellen.addActionListener(new notizErstellen());
 		notizAnzeige.addMouseListener(new notizAnwaehlen());
 		loeschen.addActionListener(new notizLöschen());
@@ -272,7 +295,7 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
+
 	public class notizLöschen implements ActionListener {
 
 		@Override
@@ -285,9 +308,9 @@ public class MainFrame extends JFrame {
 			abbrechen.setEnabled(false);
 			erstellen.setText("Erstellen");
 		}
-		
+
 	}
-	
+
 	public class notizAbbrechen implements ActionListener {
 
 		@Override
@@ -298,7 +321,7 @@ public class MainFrame extends JFrame {
 			notizEingabe.setText("");
 			erstellen.setText("Erstellen");
 		}
-		
+
 	}
 
 	public class notizErstellen implements ActionListener {
@@ -314,7 +337,7 @@ public class MainFrame extends JFrame {
 				erstellen.setText("Erstellen");
 				abbrechen.setEnabled(false);
 				notizEingabe.setEnabled(false);
-				
+
 				String text = notizEingabe.getText();
 				if (!text.trim().equals("")) {
 					Notiz n = new Notiz(text.trim());
@@ -329,7 +352,7 @@ public class MainFrame extends JFrame {
 				loeschen.setEnabled(false);
 				abbrechen.setEnabled(false);
 				notizEingabe.setEnabled(false);
-				
+
 				String text2 = notizEingabe.getText();
 				if (!text2.trim().equals("")) {
 					notizListe.get(index).setNotiz(text2);
@@ -355,23 +378,6 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			mainLayout.show(mainView, "kalender");
-		}
-
-	}
-
-	public class beenden implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			@SuppressWarnings("unused")
-			FileWriter fw;
-			try {
-				fw = new FileWriter(Main.datei);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			System.exit(-2);
 		}
 
 	}
@@ -444,8 +450,16 @@ public class MainFrame extends JFrame {
 			// TODO Auto-generated method stub
 			@SuppressWarnings("unused")
 			FileWriter fw;
+
 			try {
-				fw = new FileWriter(Main.datei);
+				fw = new FileWriter(Main.SIA);
+				fw.flush();
+				fw.close();
+				fw = new FileWriter(Main.properties);
+				fw.write(getContentPane().getHeight() + System.lineSeparator() + getContentPane().getWidth());
+
+				fw.close();
+
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
