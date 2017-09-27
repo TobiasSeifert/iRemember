@@ -14,7 +14,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 public class Main {
 
 	static FileWriter fw;
-	static File datei = new File("LockFile.txt");
+	static File datei;
+	static File dir;
+
 	static BufferedReader br = null;
 
 	public static void main(String[] args) {
@@ -39,16 +41,40 @@ public class Main {
 					e.printStackTrace();
 				}
 
-				readTxt(datei);
+				directoryCheck();
 
 			}
+
 		});
 
 	}
 
-	static void readTxt(File datei) {
+	private static void directoryCheck() {
+		dir = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder");
+		datei = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
 
+		if (dir.exists()) {
+			createData();
+		} else {
+			dir.mkdirs();
+			try {
+				fw = new FileWriter(datei);
+				fw.write("");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			createData();
+
+		}
+
+	}
+
+	private static void createData() {
+		// TODO Auto-generated method stub
 		try {
+
 			br = new BufferedReader(new FileReader(datei));
 			String text = br.readLine();
 			System.out.println(text);
@@ -60,17 +86,13 @@ public class Main {
 				fw.write("started");
 				fw.flush();
 				fw.close();
-			} else {
-				System.exit(-1);
 			}
 
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
+
 }
