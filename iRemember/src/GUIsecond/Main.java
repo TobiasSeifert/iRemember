@@ -2,7 +2,6 @@ package GUIsecond;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,8 +16,9 @@ import DataStructures.NotizListe;
 public class Main {
 
 	static FileWriter fw;
-	static File datei;
+	static File SIA;
 	static File dir;
+	static File properties;
 
 	static BufferedReader br = null;
 	private NotizListe<Notiz> notizliste = new NotizListe<Notiz>();
@@ -55,15 +55,18 @@ public class Main {
 
 	private static void directoryCheck() {
 		dir = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder");
-		datei = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
+		SIA = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
+		properties = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Properties.txt");
 
-		if (dir.exists()) {
+		if (dir.exists() && SIA.exists()) {
 			createData();
 		} else {
 			dir.mkdirs();
 			try {
-				fw = new FileWriter(datei);
+				fw = new FileWriter(SIA);
 				fw.write("");
+				fw = new FileWriter(properties);
+				fw.write("600" + System.lineSeparator() + "800");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -79,14 +82,14 @@ public class Main {
 		// TODO Auto-generated method stub
 		try {
 
-			br = new BufferedReader(new FileReader(datei));
+			br = new BufferedReader(new FileReader(SIA));
 			String text = br.readLine();
 			System.out.println(text);
 			if (text == null) {
 				MainFrame frame = new MainFrame();
 				frame.setVisible(true);
 
-				fw = new FileWriter(datei);
+				fw = new FileWriter(SIA);
 				fw.write("started");
 				fw.flush();
 				fw.close();
