@@ -265,8 +265,6 @@ public class MainFrame extends JFrame {
 		beenden = new JButton();
 		beenden.setIcon(exitIcon);
 
-		status = new JLabel("Status");
-
 		kalender = new MonatsFeld();
 
 		jahre = new JComboBox<Integer>(new Integer[] { 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
@@ -311,6 +309,8 @@ public class MainFrame extends JFrame {
 		monatRight.setIcon(rightIcon);
 		monatLeft = new JButton();
 		monatLeft.setIcon(leftIcon);
+
+		status = new JLabel();
 	}
 
 	public void addWidgets() {
@@ -813,6 +813,8 @@ public class MainFrame extends JFrame {
 		@Override
 		protected MonatsFeld doInBackground() throws Exception {
 			while (true) {
+				status.setText("<html><body>Status:<br>Notizen: " + notizListe.size() + "<br>Angezeigt: "
+						+ notizAnzeige.getModel().getSize() + "</body></html>");
 				gc = new GregorianCalendar();
 				if (!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))) {
 
@@ -846,6 +848,8 @@ public class MainFrame extends JFrame {
 		@Override
 		protected MonatsFeld doInBackground() throws Exception {
 			while (true) {
+				status.setText("<html><body>Status:<br>Notizen: " + notizListe.size() + "<br>Angezeigt: "
+						+ notizAnzeige.getModel().getSize() + "</body></html>");
 				gc = new GregorianCalendar();
 				if (!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))) {
 					mainViewKalender.remove(kalender);
