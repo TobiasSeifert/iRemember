@@ -590,7 +590,6 @@ public class MainFrame extends JFrame {
 			if (!(monate.getSelectedIndex() + 1 >= monate.getItemCount())) {
 				String monat = monate.getItemAt(monate.getSelectedIndex() + 1);
 				monate.setSelectedIndex(monate.getSelectedIndex() + 1);
-				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem();
 
@@ -604,7 +603,6 @@ public class MainFrame extends JFrame {
 			} else {
 				String monat = monate.getItemAt(0);
 				monate.setSelectedIndex(0);
-				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem() + 1;
 				jahre.setSelectedIndex(jahre.getSelectedIndex() + 1);
