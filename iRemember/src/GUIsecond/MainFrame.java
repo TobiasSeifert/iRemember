@@ -486,8 +486,8 @@ public class MainFrame extends JFrame {
 
 			String monat = (String) monate.getSelectedItem();
 			int jahr = (int)jahre.getSelectedItem();
-			System.out.println(monat);
-			System.out.println(jahr);
+//			System.out.println(monat);
+//			System.out.println(jahr);
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 //			kalender.createWidgets();
