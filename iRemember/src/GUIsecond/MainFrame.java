@@ -649,7 +649,7 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			String monat = (String) monate.getSelectedItem();
 
-			int jahr = (int) jahre.getSelectedItem();
+			int jahr = (int) jahre.getSelectedItem()-1;
 			jahre.setSelectedIndex(jahre.getSelectedIndex()-1);
 
 			mainViewKalender.remove(kalender);
