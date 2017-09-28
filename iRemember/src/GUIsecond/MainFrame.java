@@ -249,7 +249,7 @@ public class MainFrame extends JFrame {
 
 		jahrPnl = new JPanel();
 		jahrPnl.setLayout(new BoxLayout(jahrPnl, BoxLayout.X_AXIS));
-		jahrPnl.setMaximumSize(new Dimension (1920, 30));
+		jahrPnl.setMaximumSize(new Dimension(1920, 30));
 		jahrLeft = new JButton();
 		jahrLeft.setIcon(leftIcon);
 		jahrRight = new JButton();
@@ -257,7 +257,7 @@ public class MainFrame extends JFrame {
 
 		monatePnl = new JPanel();
 		monatePnl.setLayout(new BoxLayout(monatePnl, BoxLayout.X_AXIS));
-		monatePnl.setMaximumSize(new Dimension (1920, 30));
+		monatePnl.setMaximumSize(new Dimension(1920, 30));
 		monatRight = new JButton();
 		monatRight.setIcon(rightIcon);
 		monatLeft = new JButton();
@@ -323,18 +323,34 @@ public class MainFrame extends JFrame {
 		monatLeft.addActionListener(new minusMonthButtonListener());
 		jahrRight.addActionListener(new plusYearButtonListener());
 		jahrLeft.addActionListener(new minusYearButtonListener());
+		sortierung.addActionListener(new sortierungEinstellen());
 
 	}
 
-	// Listener
 	public void notizenEinfügen() {
 
 		listModel.clear();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
-		for (int i = 0; i < notizListe.size(); i++) {
-			listModel.addElement(notizListe.get(i));
+		if (sortierung.getSelectedItem().equals("nach neu")) {
+			for (int i = 0; i < notizListe.size(); i++) {
+				listModel.addElement(notizListe.get(i));
+			}
+		} else if (sortierung.getSelectedItem().equals("nach alt")) {
+			for (int i = notizListe.size(); i > 0; i--) {
+				listModel.addElement(notizListe.get(i-1));
+			}
 		}
 		notizAnzeige.setModel(listModel);
+	}
+	
+	// Listener
+	public class sortierungEinstellen implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			notizenEinfügen();
+		}
+		
 	}
 
 	public class notizAnwaehlen implements MouseListener {
@@ -402,6 +418,7 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (erstellen.getText().equals("Erstellen")) {
+				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
 				notizEingabe.setEnabled(true);
 			} else if (erstellen.getText().equals("Speichern")) {
@@ -635,42 +652,41 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
-	private class plusYearButtonListener implements ActionListener{
+
+	private class plusYearButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String monat = (String) monate.getSelectedItem();
-			int jahr = (int) jahre.getSelectedItem()+1;
-			jahre.setSelectedIndex(jahre.getSelectedIndex()+1);
-			
-			
+			int jahr = (int) jahre.getSelectedItem() + 1;
+			jahre.setSelectedIndex(jahre.getSelectedIndex() + 1);
+
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
-			
+
 		}
-		
+
 	}
 
-	private class minusYearButtonListener implements ActionListener{
+	private class minusYearButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String monat = (String) monate.getSelectedItem();
 
-			int jahr = (int) jahre.getSelectedItem()-1;
-			jahre.setSelectedIndex(jahre.getSelectedIndex()-1);
+			int jahr = (int) jahre.getSelectedItem() - 1;
+			jahre.setSelectedIndex(jahre.getSelectedIndex() - 1);
 
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
-			
+
 		}
-		
+
 	}
 }
