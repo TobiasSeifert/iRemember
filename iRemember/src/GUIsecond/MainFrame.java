@@ -50,7 +50,7 @@ import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
-	
+
 	private ImageIcon kalenderIcon;
 	private ImageIcon notizIcon;
 	private ImageIcon exitIcon;
@@ -97,7 +97,7 @@ public class MainFrame extends JFrame {
 	private JPanel monatePnl;
 	private JButton monatLeft;
 	private JButton monatRight;
-	
+
 	private JPanel sideBar;
 	private JButton notizenBtn;
 	private JButton kalenderBtn;
@@ -115,10 +115,13 @@ public class MainFrame extends JFrame {
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
-			kalenderIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png")));
-			notizIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png")));
-			exitIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/exit.png")));
-			
+			kalenderIcon = new ImageIcon(
+					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png")));
+			notizIcon = new ImageIcon(
+					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png")));
+			exitIcon = new ImageIcon(
+					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/exit.png")));
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -192,7 +195,7 @@ public class MainFrame extends JFrame {
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
-		filter.setPreferredSize(new Dimension (250, 40));
+		filter.setPreferredSize(new Dimension(250, 40));
 		filter.setMaximumSize(new Dimension(250, 40));
 
 		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
@@ -211,7 +214,9 @@ public class MainFrame extends JFrame {
 
 		kalender = new MonatsFeld();
 
-		jahre = new JComboBox<Integer>(new Integer[] { 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 });
+		jahre = new JComboBox<Integer>(new Integer[] { 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+				2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027,
+				2028, 2029, 2030 });
 		jahre.setSelectedItem(new GregorianCalendar().get(Calendar.YEAR));
 
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
@@ -235,14 +240,14 @@ public class MainFrame extends JFrame {
 		abbrechen.setEnabled(false);
 
 		notizScrollBar = new JScrollPane(notizAnzeige);
-		
+
 		jahrPnl = new JPanel();
-		jahrPnl.setLayout(new BoxLayout(jahrPnl,BoxLayout.X_AXIS));
+		jahrPnl.setLayout(new BoxLayout(jahrPnl, BoxLayout.X_AXIS));
 		jahrLeft = new JButton();
 		jahrRight = new JButton();
-		
+
 		monatePnl = new JPanel();
-		monatePnl.setLayout(new BoxLayout(monatePnl,BoxLayout.X_AXIS));
+		monatePnl.setLayout(new BoxLayout(monatePnl, BoxLayout.X_AXIS));
 		monatRight = new JButton();
 		monatLeft = new JButton();
 	}
@@ -266,7 +271,7 @@ public class MainFrame extends JFrame {
 		mainViewNotizen.add(notizScrollBar);
 		mainViewNotizen.add(einlesenProgBar);
 		mainViewNotizen.add(notizenBottom);
-		
+
 		notizenTop.add(Box.createHorizontalGlue());
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
@@ -278,11 +283,11 @@ public class MainFrame extends JFrame {
 		jahrPnl.add(jahrLeft);
 		jahrPnl.add(jahre);
 		jahrPnl.add(jahrRight);
-		
+
 		monatePnl.add(monatLeft);
 		monatePnl.add(monate);
 		monatePnl.add(monatRight);
-		
+
 		notizenBottom.add(notizEingabe);
 		notizenBottom.add(untereKnoepfe);
 
@@ -389,7 +394,7 @@ public class MainFrame extends JFrame {
 				erstellen.setText("Erstellen");
 				abbrechen.setEnabled(false);
 				notizEingabe.setEnabled(false);
-				
+
 				String text = notizEingabe.getText();
 				if (!text.trim().equals("")) {
 					Notiz n = new Notiz(text.trim());
@@ -530,8 +535,8 @@ public class MainFrame extends JFrame {
 
 			String monat = (String) monate.getSelectedItem();
 
-			int jahr = (int)jahre.getSelectedItem();
-			
+			int jahr = (int) jahre.getSelectedItem();
+
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 			mainViewKalender.add(kalender);
@@ -540,81 +545,80 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
-	private class plusMonthButtonListener implements ActionListener{
+
+	private class plusMonthButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!(monate.getSelectedIndex()+1>=monate.getItemCount())) {
-				String monat = monate.getItemAt(monate.getSelectedIndex()+1);			
-				monate.setSelectedIndex(monate.getSelectedIndex()+1);
+			if (!(monate.getSelectedIndex() + 1 >= monate.getItemCount())) {
+				String monat = monate.getItemAt(monate.getSelectedIndex() + 1);
+				monate.setSelectedIndex(monate.getSelectedIndex() + 1);
 				System.out.println(monat);
-				
-				int jahr = (int)jahre.getSelectedItem();
-				
+
+				int jahr = (int) jahre.getSelectedItem();
+
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
-	
+
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
-				
-				
-			}else {
+
+			} else {
 				String monat = monate.getItemAt(0);
 				monate.setSelectedIndex(0);
 				System.out.println(monat);
-				
-				int jahr = (int)jahre.getSelectedItem()+1;
-				jahre.setSelectedIndex(jahre.getSelectedIndex()+1);
+
+				int jahr = (int) jahre.getSelectedItem() + 1;
+				jahre.setSelectedIndex(jahre.getSelectedIndex() + 1);
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
-	
+
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
-				
+
 			}
 		}
-		
+
 	}
-	
-	private class minusMonthButtonListener implements ActionListener{
+
+	private class minusMonthButtonListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!(monate.getSelectedIndex()-1<monate.getItemCount())) {
-				String monat = monate.getItemAt(monate.getSelectedIndex()-1);
-			
+			if (!(monate.getSelectedIndex() - 1 < monate.getItemCount())) {
+				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
+
 				System.out.println(monat);
-				
-				int jahr = (int)jahre.getSelectedItem();
-				
+
+				int jahr = (int) jahre.getSelectedItem();
+
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
-	
+
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
-				
-			}else {
+
+			} else {
 				String monat = monate.getItemAt(11);
-				
+
 				System.out.println(monat);
-				
-				int jahr = (int)jahre.getSelectedItem()-1;
-				
+
+				int jahr = (int) jahre.getSelectedItem() - 1;
+
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
-	
+
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
-				
+
 			}
-			
+
 		}
-		
+
 	}
 
 }
