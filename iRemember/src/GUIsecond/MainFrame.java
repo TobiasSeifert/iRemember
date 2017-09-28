@@ -117,7 +117,7 @@ public class MainFrame extends JFrame {
 	private String list_sorting;
 
 	public MainFrame() {
-		
+
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
@@ -155,39 +155,38 @@ public class MainFrame extends JFrame {
 	}
 
 	private void loadNotes() {
-		
+
 		int value;
-		 
+
 		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
-		
+
 		try {
-	value = directory.listFiles().length;
-	
-			
-		
-		}catch(NullPointerException e) {
+			value = directory.listFiles().length;
+
+		} catch (NullPointerException e) {
 			value = 0;
 			System.out.println("value = 0");
 		}
-		
-		
-		for(int i = 0; i < value; i++) {
+
+		for (int i = 0; i <= value; i++) {
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-				
+				BufferedReader br = new BufferedReader(new FileReader(
+						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+
 				Notiz n = new Notiz(br.readLine());
 				notizListe.add(n);
-				
+
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(i + " = Ende der Notiz-Liste");
+				// e.printStackTrace();
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		notizenEinfügen();
-		
+
 	}
 
 	private void setHeight_Width_Location() {
@@ -740,7 +739,7 @@ public class MainFrame extends JFrame {
 			if (!(monate.getSelectedIndex() - 1 < 0)) {
 				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
 				monate.setSelectedIndex(monate.getSelectedIndex() - 1);
-				
+
 				int jahr = (int) jahre.getSelectedItem();
 
 				mainViewKalender.remove(kalender);
@@ -753,7 +752,6 @@ public class MainFrame extends JFrame {
 			} else {
 				String monat = monate.getItemAt(11);
 				monate.setSelectedIndex(11);
-				
 
 				int jahr = (int) jahre.getSelectedItem() - 1;
 				jahre.setSelectedIndex(jahre.getSelectedIndex() - 1);
@@ -807,24 +805,23 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
+
 	private class aktualisieren1 extends SwingWorker<MonatsFeld, Integer> {
 
-		private GregorianCalendar gc; 
+		private GregorianCalendar gc;
 
 		@Override
 		protected MonatsFeld doInBackground() throws Exception {
-			while(true) {
+			while (true) {
 				gc = new GregorianCalendar();
-				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
-					
-					
+				if (!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))) {
+
 					mainViewKalender.remove(kalender);
 					kalender = new MonatsFeld();
 					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
 					monate.setSelectedItem(kalender.getHeute().get(Calendar.MONTH));
 					return kalender;
-				}	
+				}
 			}
 		}
 
@@ -833,24 +830,24 @@ public class MainFrame extends JFrame {
 				kalender = get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
-			}finally {
+			} finally {
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
 				new aktualisieren2().execute();
 			}
-		}		
+		}
 	}
-	
+
 	private class aktualisieren2 extends SwingWorker<MonatsFeld, Integer> {
 
-		private GregorianCalendar gc; 
-		
-		@Override	
+		private GregorianCalendar gc;
+
+		@Override
 		protected MonatsFeld doInBackground() throws Exception {
-			while(true) {
+			while (true) {
 				gc = new GregorianCalendar();
-				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
+				if (!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))) {
 					mainViewKalender.remove(kalender);
 					kalender = new MonatsFeld();
 					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
@@ -866,12 +863,12 @@ public class MainFrame extends JFrame {
 			} catch (InterruptedException | ExecutionException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}finally {
+			} finally {
 				mainViewKalender.add(kalender);
 				mainLayout.show(mainView, "notizen");
 				mainLayout.show(mainView, "kalender");
 				new aktualisieren1().execute();
 			}
-		}		
+		}
 	}
 }
