@@ -54,6 +54,8 @@ public class MainFrame extends JFrame {
 	private ImageIcon kalenderIcon;
 	private ImageIcon notizIcon;
 	private ImageIcon exitIcon;
+	private ImageIcon rightIcon;
+	private ImageIcon leftIcon;
 
 	private int index;
 
@@ -121,6 +123,10 @@ public class MainFrame extends JFrame {
 					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png")));
 			exitIcon = new ImageIcon(
 					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/exit.png")));
+			rightIcon = new ImageIcon(
+					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/arrowRight.png")));
+			leftIcon = new ImageIcon(
+					ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/arrowLeft.png")));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -243,13 +249,19 @@ public class MainFrame extends JFrame {
 
 		jahrPnl = new JPanel();
 		jahrPnl.setLayout(new BoxLayout(jahrPnl, BoxLayout.X_AXIS));
+		jahrPnl.setMaximumSize(new Dimension (1920, 30));
 		jahrLeft = new JButton();
+		jahrLeft.setIcon(leftIcon);
 		jahrRight = new JButton();
+		jahrRight.setIcon(rightIcon);
 
 		monatePnl = new JPanel();
 		monatePnl.setLayout(new BoxLayout(monatePnl, BoxLayout.X_AXIS));
+		monatePnl.setMaximumSize(new Dimension (1920, 30));
 		monatRight = new JButton();
+		monatRight.setIcon(rightIcon);
 		monatLeft = new JButton();
+		monatLeft.setIcon(leftIcon);
 	}
 
 	public void addWidgets() {
@@ -587,9 +599,9 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(!(monate.getSelectedIndex()-1<0)) {
-				String monat = monate.getItemAt(monate.getSelectedIndex()-1);
-				monate.setSelectedIndex(monate.getSelectedIndex()-1);
+			if (!(monate.getSelectedIndex() - 1 < 0)) {
+				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
+				monate.setSelectedIndex(monate.getSelectedIndex() - 1);
 				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem();
@@ -605,10 +617,10 @@ public class MainFrame extends JFrame {
 				String monat = monate.getItemAt(11);
 				monate.setSelectedIndex(11);
 				System.out.println(monat);
-				
-				int jahr = (int)jahre.getSelectedItem()-1;
-				jahre.setSelectedIndex(jahre.getSelectedIndex()-1);
-				
+
+				int jahr = (int) jahre.getSelectedItem() - 1;
+				jahre.setSelectedIndex(jahre.getSelectedIndex() - 1);
+
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
 
