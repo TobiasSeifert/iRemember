@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -16,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -29,7 +29,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -38,6 +38,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -50,8 +51,9 @@ import gui.MonatsFeld;
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
 	
-	private BufferedImage kalenderImg;
-	private BufferedImage notizImg;
+	private ImageIcon kalenderIcon;
+	private ImageIcon notizIcon;
+	private ImageIcon exitIcon;
 
 	private int index;
 
@@ -78,7 +80,7 @@ public class MainFrame extends JFrame {
 
 	private JPanel notizenBottom;
 
-	private JTextField notizEingabe;
+	private JTextArea notizEingabe;
 
 	private JPanel untereKnoepfe;
 	private JButton erstellen;
@@ -102,19 +104,21 @@ public class MainFrame extends JFrame {
 	private JLabel status;
 	private JButton beenden;
 
-	private int width, height;
+	private int width, height, Window_Location_X, Window_Location_Y;
 
 	public MainFrame() {
-		setHeight_Width();
+		setHeight_Width_Location();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setLocation(300, 200);
+		setLocation(Window_Location_X, Window_Location_Y);
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
-			kalenderImg = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png"));
-			notizImg = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png"));
+			kalenderIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png")));
+			notizIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png")));
+			exitIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/exit.png")));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -125,16 +129,19 @@ public class MainFrame extends JFrame {
 
 		addWindowListener(new TrayListener(this));
 
-		setSize(height, width);
+		setSize(width, height);
 		// pack();
 
 	}
 
-	private void setHeight_Width() {
+	private void setHeight_Width_Location() {
 		try {
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
-			width = Integer.parseInt(bufr.readLine());
-			height = Integer.parseInt(bufr.readLine());
+			// width = Integer.parseInt(bufr.readLine());
+			width = Integer.parseInt(bufr.readLine().substring(14));
+			height = Integer.parseInt(bufr.readLine().substring(15));
+			Window_Location_X = Integer.parseInt(bufr.readLine().substring(20));
+			Window_Location_Y = Integer.parseInt(bufr.readLine().substring(20));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -166,29 +173,39 @@ public class MainFrame extends JFrame {
 		header.setBackground(Color.BLACK);
 		header.setForeground(Color.WHITE);
 
-		notizenBtn = new JButton("Notizen");
+		notizenBtn = new JButton();
+		notizenBtn.setIcon(notizIcon);
 		notizenBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		notizenBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		notizenBtn.setForeground(Color.GREEN);
 
-		kalenderBtn = new JButton("Kalender");
+		kalenderBtn = new JButton();
+		kalenderBtn.setIcon(kalenderIcon);
 		kalenderBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		kalenderBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		kalenderBtn.setForeground(Color.GREEN);
 
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
+		notizenTop.setMaximumSize(new Dimension(1920, 50));
 
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
+		filter.setPreferredSize(new Dimension (250, 40));
+		filter.setMaximumSize(new Dimension(250, 40));
 
 		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
+		sortierung.setPreferredSize(new Dimension(100, 40));
+		sortierung.setMaximumSize(new Dimension(250, 40));
 
 		notizenBottom = new JPanel();
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
+		notizenBottom.setMaximumSize(new Dimension(1920, 200));
+		notizenBottom.setPreferredSize(new Dimension(1920, 200));
 
-		beenden = new JButton("Exit");
+		beenden = new JButton();
+		beenden.setIcon(exitIcon);
 
 		status = new JLabel("Status");
 
@@ -196,13 +213,13 @@ public class MainFrame extends JFrame {
 
 		jahre = new JComboBox<Integer>(new Integer[] { 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 });
 		jahre.setSelectedItem(new GregorianCalendar().get(Calendar.YEAR));
-		
+
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
 				"August", "September", "Oktober", "November", "Dezember" });
-		
+
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
-		notizEingabe = new JTextField();
+		notizEingabe = new JTextArea();
 		notizEingabe.setEnabled(false);
 
 		notizAnzeige = new JList<Notiz>();
@@ -249,7 +266,8 @@ public class MainFrame extends JFrame {
 		mainViewNotizen.add(notizScrollBar);
 		mainViewNotizen.add(einlesenProgBar);
 		mainViewNotizen.add(notizenBottom);
-
+		
+		notizenTop.add(Box.createHorizontalGlue());
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
 
@@ -284,10 +302,14 @@ public class MainFrame extends JFrame {
 		abbrechen.addActionListener(new notizAbbrechen());
 		monate.addActionListener(new monthDropDownListener());
 		jahre.addActionListener(new monthDropDownListener());
+<<<<<<< HEAD
 		monatRight.addActionListener(new plusMonthButtonListener());
 		monatLeft.addActionListener(new minusMonthButtonListener());
 		
 		
+=======
+
+>>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 	}
 
 	// Listener
@@ -366,23 +388,19 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (erstellen.getText().equals("Erstellen")) {
-				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
 				notizEingabe.setEnabled(true);
-				System.out.println("Erstellen");
 			} else if (erstellen.getText().equals("Speichern")) {
 				erstellen.setText("Erstellen");
 				abbrechen.setEnabled(false);
 				notizEingabe.setEnabled(false);
-
+				
 				String text = notizEingabe.getText();
 				if (!text.trim().equals("")) {
 					Notiz n = new Notiz(text.trim());
-					System.out.println(text);
 					notizListe.add(n);
 					notizenEinfügen();
 					notizEingabe.setText("");
-					System.out.println("Speichern");
 				}
 			} else if (erstellen.getText().equals("Bearbeiten")) {
 				erstellen.setText("Erstellen");
@@ -493,7 +511,9 @@ public class MainFrame extends JFrame {
 				fw.flush();
 				fw.close();
 				fw = new FileWriter(Main.properties);
-				fw.write(getContentPane().getHeight() + System.lineSeparator() + getContentPane().getWidth());
+				fw.write("Window_Width: " + getWidth() + System.lineSeparator() + "Window_Height: " + getHeight()
+						+ System.lineSeparator() + "Window_Locastion_X: " + (int) getLocation().getX()
+						+ System.lineSeparator() + "Window_Locastion_Y: " + (int) getLocation().getY());
 
 				fw.close();
 
@@ -507,24 +527,34 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
+
 	private class monthDropDownListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String monat = (String) monate.getSelectedItem();
+
 			int jahr = (int)jahre.getSelectedItem();
 			
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
+<<<<<<< HEAD
 
+=======
+			// kalender.createWidgets();
+			// kalender.addWidgets();
+			// kalender.validate();
+			// kalender.repaint();
+			// kalender.getM
+>>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
 		}
-		
+
 	}
+<<<<<<< HEAD
 	
 	private class plusMonthButtonListener implements ActionListener{
 
@@ -602,4 +632,7 @@ public class MainFrame extends JFrame {
 		
 	}
 	
+=======
+
+>>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 }
