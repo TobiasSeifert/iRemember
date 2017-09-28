@@ -144,12 +144,12 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-<<<<<<< HEAD
+
 		loadNotes();
 
-=======
+
 		new aktualisieren1().execute();
->>>>>>> bd9af8088ba81db7ba5828681e896d84ac88e094
+
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
