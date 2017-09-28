@@ -19,6 +19,7 @@ public class Main {
 	static File SIA;
 	static File dir;
 	static File properties;
+	static File notes;
 
 	static BufferedReader br = null;
 	private NotizListe<Notiz> notizliste = new NotizListe<Notiz>();
@@ -57,11 +58,12 @@ public class Main {
 		dir = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder");
 		SIA = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
 		properties = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Properties.txt");
+		notes = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes");
 
-		if (dir.exists() && SIA.exists() && properties.exists()) {
+		if (dir.exists() && SIA.exists() && properties.exists()&&notes.exists()) {
 			createData();
 		} else {
-			dir.mkdirs();
+			notes.mkdirs();
 			try {
 				fw = new FileWriter(SIA);
 				fw.write("");
@@ -69,7 +71,8 @@ public class Main {
 				fw.close();
 				fw = new FileWriter(properties);
 				fw.write("Window_Width: 600" + System.lineSeparator() + "Window_Height: 800" + System.lineSeparator()
-						+ "Window_Location_X: 950" + System.lineSeparator() + "Window_Location_Y: 500");
+						+ "Window_Location_X: 950" + System.lineSeparator() + "Window_Location_Y: 500"
+						+ System.lineSeparator() + "List_Sorting: nach neu");
 				fw.flush();
 				fw.close();
 			} catch (IOException e) {
