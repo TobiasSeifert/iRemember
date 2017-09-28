@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -27,8 +26,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.concurrent.ExecutionException;
+
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -144,12 +143,9 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-<<<<<<< HEAD
 		loadNotes();
 
-=======
 		new aktualisieren1().execute();
->>>>>>> bd9af8088ba81db7ba5828681e896d84ac88e094
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
