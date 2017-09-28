@@ -131,9 +131,6 @@ public class MainFrame extends JFrame {
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
 			width = Integer.parseInt(bufr.readLine());
 			height = Integer.parseInt(bufr.readLine());
-
-			System.out.println(bufr.readLine());
-			System.out.println(bufr.readLine());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -493,8 +490,8 @@ public class MainFrame extends JFrame {
 
 			String monat = (String) monate.getSelectedItem();
 			int jahr = (int)jahre.getSelectedItem();
-			System.out.println(monat);
-			System.out.println(jahr);
+//			System.out.println(monat);
+//			System.out.println(jahr);
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 //			kalender.createWidgets();
