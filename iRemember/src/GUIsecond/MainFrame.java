@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -25,7 +26,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.concurrent.ExecutionException;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -42,7 +45,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import DataStructures.Notiz;
 import DataStructures.NotizListRenderer;
@@ -60,7 +66,7 @@ public class MainFrame extends JFrame {
 
 	private int index;
 
-	private NotizListe<Notiz> notizListe = new NotizListe<Notiz>();
+	private List<Notiz> notizListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
@@ -138,8 +144,12 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
+<<<<<<< HEAD
 		loadNotes();
 
+=======
+		new aktualisieren1().execute();
+>>>>>>> bd9af8088ba81db7ba5828681e896d84ac88e094
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
@@ -242,6 +252,7 @@ public class MainFrame extends JFrame {
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
+		filter.setText("");
 		filter.setPreferredSize(new Dimension(250, 40));
 		filter.setMaximumSize(new Dimension(250, 40));
 
@@ -366,6 +377,7 @@ public class MainFrame extends JFrame {
 		jahrRight.addActionListener(new plusYearButtonListener());
 		jahrLeft.addActionListener(new minusYearButtonListener());
 		sortierung.addActionListener(new sortierungEinstellen());
+		filter.addCaretListener(new listeFiltern());
 
 	}
 
@@ -386,6 +398,75 @@ public class MainFrame extends JFrame {
 	}
 
 	// Listener
+	public class listeFiltern implements CaretListener {
+
+		@Override
+		public void caretUpdate(CaretEvent e) {
+
+			String filtertxt = filter.getText();
+			char[] filterarray = filtertxt.toCharArray();
+			int filterLänge = filterarray.length;
+			int notizPosition = 1;
+
+			if (filtertxt.length() > 0) {
+
+				listModel.clear();
+				notizAnzeige.setCellRenderer(new NotizListRenderer());
+
+				for (int i = 0; i < notizListe.size(); i++) {
+
+					String notiztxt = notizListe.get(i).getNotiz();
+					char[] notizarray = notiztxt.toCharArray();
+
+					if (notiztxt.length() >= filtertxt.length()) {
+
+						notizSchleife: { // dieses dumme CodeLabel ist essentiell!
+							for (int j = 0; j < notizarray.length; j++) {
+
+								if (filterarray[0] == notizarray[j]) {
+
+									if (filtertxt.length() == 1) {
+
+										listModel.addElement(notizListe.get(i));
+										break;
+
+									}
+									if (filtertxt.length() > 1) {
+										for (int k = 0; k < filterLänge - 1; k++) {
+											if (notizarray[notizPosition + k] != filterarray[k + 1]) {
+												break notizSchleife;
+
+											}
+											System.out.println(k);
+											if (k == filterLänge - 2) {
+												listModel.addElement(notizListe.get(i));
+												break notizSchleife;
+
+											}
+
+										}
+
+										notizPosition++;
+
+									}
+								}
+							}
+						}
+					}
+				}
+
+				notizAnzeige.setModel(listModel);
+
+			} else if (filtertxt.length() <= 0) {
+
+				notizenEinfügen();
+
+			}
+
+		}
+
+	}
+
 	public class sortierungEinstellen implements ActionListener {
 
 		@Override
@@ -627,7 +708,6 @@ public class MainFrame extends JFrame {
 			if (!(monate.getSelectedIndex() + 1 >= monate.getItemCount())) {
 				String monat = monate.getItemAt(monate.getSelectedIndex() + 1);
 				monate.setSelectedIndex(monate.getSelectedIndex() + 1);
-				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem();
 
@@ -641,7 +721,6 @@ public class MainFrame extends JFrame {
 			} else {
 				String monat = monate.getItemAt(0);
 				monate.setSelectedIndex(0);
-				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem() + 1;
 				jahre.setSelectedIndex(jahre.getSelectedIndex() + 1);
@@ -664,8 +743,7 @@ public class MainFrame extends JFrame {
 			if (!(monate.getSelectedIndex() - 1 < 0)) {
 				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
 				monate.setSelectedIndex(monate.getSelectedIndex() - 1);
-				System.out.println(monat);
-
+				
 				int jahr = (int) jahre.getSelectedItem();
 
 				mainViewKalender.remove(kalender);
@@ -678,7 +756,7 @@ public class MainFrame extends JFrame {
 			} else {
 				String monat = monate.getItemAt(11);
 				monate.setSelectedIndex(11);
-				System.out.println(monat);
+				
 
 				int jahr = (int) jahre.getSelectedItem() - 1;
 				jahre.setSelectedIndex(jahre.getSelectedIndex() - 1);
@@ -731,5 +809,72 @@ public class MainFrame extends JFrame {
 
 		}
 
+	}
+	
+	private class aktualisieren1 extends SwingWorker<MonatsFeld, Integer> {
+
+		private GregorianCalendar gc; 
+
+		@Override
+		protected MonatsFeld doInBackground() throws Exception {
+			while(true) {
+				gc = new GregorianCalendar();
+				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
+					
+					
+					mainViewKalender.remove(kalender);
+					kalender = new MonatsFeld();
+					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
+					monate.setSelectedItem(kalender.getHeute().get(Calendar.MONTH));
+					return kalender;
+				}	
+			}
+		}
+
+		protected void done() {
+			try {
+				kalender = get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}finally {
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				new aktualisieren2().execute();
+			}
+		}		
+	}
+	
+	private class aktualisieren2 extends SwingWorker<MonatsFeld, Integer> {
+
+		private GregorianCalendar gc; 
+		
+		@Override	
+		protected MonatsFeld doInBackground() throws Exception {
+			while(true) {
+				gc = new GregorianCalendar();
+				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
+					mainViewKalender.remove(kalender);
+					kalender = new MonatsFeld();
+					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
+					monate.setSelectedItem(kalender.getHeute().get(Calendar.MONTH));
+					return kalender;
+				}
+			}
+		}
+
+		protected void done() {
+			try {
+				kalender = get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				new aktualisieren1().execute();
+			}
+		}		
 	}
 }
