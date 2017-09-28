@@ -19,6 +19,7 @@ public class Main {
 	static File SIA;
 	static File dir;
 	static File properties;
+	static File notes;
 
 	static BufferedReader br = null;
 	private NotizListe<Notiz> notizliste = new NotizListe<Notiz>();
@@ -57,11 +58,12 @@ public class Main {
 		dir = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder");
 		SIA = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\LockFile.txt");
 		properties = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Properties.txt");
+		notes = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes");
 
-		if (dir.exists() && SIA.exists() && properties.exists()) {
+		if (dir.exists() && SIA.exists() && properties.exists()&&notes.exists()) {
 			createData();
 		} else {
-			dir.mkdirs();
+			notes.mkdirs();
 			try {
 				fw = new FileWriter(SIA);
 				fw.write("");

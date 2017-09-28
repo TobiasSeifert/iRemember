@@ -12,6 +12,7 @@ public class Notiz {
 	private String notiz;
 	private Date date;
 	private GregorianCalendar cal;
+	private String name;
 
 	public Notiz(String notiztext) {
 		setTimestamp(System.currentTimeMillis());
@@ -64,6 +65,14 @@ public class Notiz {
 	public String toString() {
 		return cal.get(Calendar.DAY_OF_MONTH) + ". " + new MonatsFeld().getMonth(cal) + ", " + checkTime(cal.get(Calendar.HOUR_OF_DAY)) + ":"
 				+ checkTime(cal.get(Calendar.MINUTE));
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }
