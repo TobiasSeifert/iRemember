@@ -241,4 +241,8 @@ public class MonatsFeld extends JPanel {
 		this.jahr = jahr;
 		cal.set(this.jahr, this.monat, tag);
 	}
+
+	public GregorianCalendar getHeute() {
+		return heute;
+	}
 }
