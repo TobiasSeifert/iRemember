@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -39,6 +38,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
@@ -80,7 +80,7 @@ public class MainFrame extends JFrame {
 
 	private JPanel notizenBottom;
 
-	private JTextField notizEingabe;
+	private JTextArea notizEingabe;
 
 	private JPanel untereKnoepfe;
 	private JButton erstellen;
@@ -212,7 +212,7 @@ public class MainFrame extends JFrame {
 		
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
-		notizEingabe = new JTextField();
+		notizEingabe = new JTextArea();
 		notizEingabe.setEnabled(false);
 
 		notizAnzeige = new JList<Notiz>();
@@ -356,23 +356,19 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (erstellen.getText().equals("Erstellen")) {
-				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
 				notizEingabe.setEnabled(true);
-				System.out.println("Erstellen");
 			} else if (erstellen.getText().equals("Speichern")) {
 				erstellen.setText("Erstellen");
 				abbrechen.setEnabled(false);
 				notizEingabe.setEnabled(false);
-
+				
 				String text = notizEingabe.getText();
 				if (!text.trim().equals("")) {
 					Notiz n = new Notiz(text.trim());
-					System.out.println(text);
 					notizListe.add(n);
 					notizenEinfügen();
 					notizEingabe.setText("");
-					System.out.println("Speichern");
 				}
 			} else if (erstellen.getText().equals("Bearbeiten")) {
 				erstellen.setText("Erstellen");
