@@ -587,9 +587,9 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if (!(monate.getSelectedIndex() - 1 < monate.getItemCount())) {
-				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
-
+			if(!(monate.getSelectedIndex()-1<0)) {
+				String monat = monate.getItemAt(monate.getSelectedIndex()-1);
+				monate.setSelectedIndex(monate.getSelectedIndex()-1);
 				System.out.println(monat);
 
 				int jahr = (int) jahre.getSelectedItem();
@@ -603,11 +603,12 @@ public class MainFrame extends JFrame {
 
 			} else {
 				String monat = monate.getItemAt(11);
-
+				monate.setSelectedIndex(11);
 				System.out.println(monat);
-
-				int jahr = (int) jahre.getSelectedItem() - 1;
-
+				
+				int jahr = (int)jahre.getSelectedItem()-1;
+				jahre.setSelectedIndex(jahre.getSelectedIndex()-1);
+				
 				mainViewKalender.remove(kalender);
 				kalender = new MonatsFeld(monat, jahr);
 
