@@ -13,3 +13,8 @@
 /MainFrame$notizErstellen.class
 /MainFrame$notizLöschen.class
 /MainFrame$monthDropDownListener.class
+/MainFrame$minusMonthButtonListener.class
+/MainFrame$minusYearButtonListener.class
+/MainFrame$plusMonthButtonListener.class
+/MainFrame$plusYearButtonListener.class
+/MainFrame$sortierungEinstellen.class

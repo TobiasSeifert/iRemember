@@ -107,6 +107,7 @@ public class MainFrame extends JFrame {
 	private JButton beenden;
 
 	private int width, height, Window_Location_X, Window_Location_Y;
+	private String list_sorting;
 
 	public MainFrame() {
 		setHeight_Width_Location();
@@ -151,6 +152,7 @@ public class MainFrame extends JFrame {
 			height = Integer.parseInt(bufr.readLine().substring(15));
 			Window_Location_X = Integer.parseInt(bufr.readLine().substring(20));
 			Window_Location_Y = Integer.parseInt(bufr.readLine().substring(20));
+			list_sorting = bufr.readLine().substring(14);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -207,6 +209,7 @@ public class MainFrame extends JFrame {
 		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
 		sortierung.setPreferredSize(new Dimension(100, 40));
 		sortierung.setMaximumSize(new Dimension(250, 40));
+		sortierung.setSelectedItem(list_sorting);
 
 		notizenBottom = new JPanel();
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
@@ -337,12 +340,12 @@ public class MainFrame extends JFrame {
 			}
 		} else if (sortierung.getSelectedItem().equals("nach alt")) {
 			for (int i = notizListe.size(); i > 0; i--) {
-				listModel.addElement(notizListe.get(i-1));
+				listModel.addElement(notizListe.get(i - 1));
 			}
 		}
 		notizAnzeige.setModel(listModel);
 	}
-	
+
 	// Listener
 	public class sortierungEinstellen implements ActionListener {
 
@@ -350,7 +353,7 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			notizenEinfügen();
 		}
-		
+
 	}
 
 	public class notizAnwaehlen implements MouseListener {
@@ -544,7 +547,8 @@ public class MainFrame extends JFrame {
 				fw = new FileWriter(Main.properties);
 				fw.write("Window_Width: " + getWidth() + System.lineSeparator() + "Window_Height: " + getHeight()
 						+ System.lineSeparator() + "Window_Locastion_X: " + (int) getLocation().getX()
-						+ System.lineSeparator() + "Window_Locastion_Y: " + (int) getLocation().getY());
+						+ System.lineSeparator() + "Window_Locastion_Y: " + (int) getLocation().getY()
+						+ System.lineSeparator() + "List_Sorting: " + sortierung.getSelectedItem());
 
 				fw.close();
 
