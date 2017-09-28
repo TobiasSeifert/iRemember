@@ -85,13 +85,17 @@ public class MainFrame extends JFrame {
 	private JButton loeschen;
 	private JButton abbrechen;
 
-	// TODO Bearbeiten und Erstellen
-
 	private JPanel mainViewKalender;
 	private MonatsFeld kalender;
 	private JComboBox<Integer> jahre;
+	private JPanel jahrPnl;
+	private JButton jahrLeft;
+	private JButton jahrRight;
 	private JComboBox<String> monate;
-
+	private JPanel monatePnl;
+	private JButton monatLeft;
+	private JButton monatRight;
+	
 	private JPanel sideBar;
 	private JButton notizenBtn;
 	private JButton kalenderBtn;
@@ -214,6 +218,16 @@ public class MainFrame extends JFrame {
 		abbrechen.setEnabled(false);
 
 		notizScrollBar = new JScrollPane(notizAnzeige);
+		
+		jahrPnl = new JPanel();
+		jahrPnl.setLayout(new BoxLayout(jahrPnl,BoxLayout.X_AXIS));
+		jahrLeft = new JButton();
+		jahrRight = new JButton();
+		
+		monatePnl = new JPanel();
+		monatePnl.setLayout(new BoxLayout(monatePnl,BoxLayout.X_AXIS));
+		monatRight = new JButton();
+		monatLeft = new JButton();
 	}
 
 	public void addWidgets() {
@@ -239,10 +253,18 @@ public class MainFrame extends JFrame {
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
 
-		mainViewKalender.add(jahre);
-		mainViewKalender.add(monate);
+		mainViewKalender.add(jahrPnl);
+		mainViewKalender.add(monatePnl);
 		mainViewKalender.add(kalender);
 
+		jahrPnl.add(jahrLeft);
+		jahrPnl.add(jahre);
+		jahrPnl.add(jahrRight);
+		
+		monatePnl.add(monatLeft);
+		monatePnl.add(monate);
+		monatePnl.add(monatRight);
+		
 		notizenBottom.add(notizEingabe);
 		notizenBottom.add(untereKnoepfe);
 
@@ -262,6 +284,9 @@ public class MainFrame extends JFrame {
 		abbrechen.addActionListener(new notizAbbrechen());
 		monate.addActionListener(new monthDropDownListener());
 		jahre.addActionListener(new monthDropDownListener());
+		monatRight.addActionListener(new plusMonthButtonListener());
+		monatLeft.addActionListener(new minusMonthButtonListener());
+		
 		
 	}
 
@@ -490,18 +515,89 @@ public class MainFrame extends JFrame {
 
 			String monat = (String) monate.getSelectedItem();
 			int jahr = (int)jahre.getSelectedItem();
-//			System.out.println(monat);
-//			System.out.println(jahr);
+			
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
-//			kalender.createWidgets();
-//			kalender.addWidgets();
-//			kalender.validate();
-//			kalender.repaint();
-//			kalender.getM
+
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
+		}
+		
+	}
+	
+	private class plusMonthButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!(monate.getSelectedIndex()+1>=monate.getItemCount())) {
+				String monat = monate.getItemAt(monate.getSelectedIndex()+1);			
+				monate.setSelectedIndex(monate.getSelectedIndex()+1);
+				System.out.println(monat);
+				
+				int jahr = (int)jahre.getSelectedItem();
+				
+				mainViewKalender.remove(kalender);
+				kalender = new MonatsFeld(monat, jahr);
+	
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				
+				
+			}else {
+				String monat = monate.getItemAt(0);
+				monate.setSelectedIndex(0);
+				System.out.println(monat);
+				
+				int jahr = (int)jahre.getSelectedItem()+1;
+				jahre.setSelectedIndex(jahre.getSelectedIndex()+1);
+				mainViewKalender.remove(kalender);
+				kalender = new MonatsFeld(monat, jahr);
+	
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				
+			}
+		}
+		
+	}
+	
+	private class minusMonthButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if(!(monate.getSelectedIndex()-1<monate.getItemCount())) {
+				String monat = monate.getItemAt(monate.getSelectedIndex()-1);
+			
+				System.out.println(monat);
+				
+				int jahr = (int)jahre.getSelectedItem();
+				
+				mainViewKalender.remove(kalender);
+				kalender = new MonatsFeld(monat, jahr);
+	
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				
+			}else {
+				String monat = monate.getItemAt(11);
+				
+				System.out.println(monat);
+				
+				int jahr = (int)jahre.getSelectedItem()-1;
+				
+				mainViewKalender.remove(kalender);
+				kalender = new MonatsFeld(monat, jahr);
+	
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				
+			}
+			
 		}
 		
 	}
