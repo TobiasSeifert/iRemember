@@ -18,6 +18,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -110,6 +111,7 @@ public class MainFrame extends JFrame {
 	private String list_sorting;
 
 	public MainFrame() {
+		
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
@@ -136,12 +138,49 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
+		loadNotes();
 
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
 		// pack();
 
+	}
+
+	private void loadNotes() {
+		
+		int value;
+		 
+		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
+		
+		try {
+	value = directory.listFiles().length;
+	
+			
+		
+		}catch(NullPointerException e) {
+			value = 0;
+			System.out.println("value = 0");
+		}
+		
+		
+		for(int i = 0; i < value; i++) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+				
+				Notiz n = new Notiz(br.readLine());
+				notizListe.add(n);
+				
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		notizenEinfügen();
+		
 	}
 
 	private void setHeight_Width_Location() {
