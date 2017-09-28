@@ -16,6 +16,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,6 +29,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -47,6 +49,9 @@ import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
+	
+	private BufferedImage kalenderImg;
+	private BufferedImage notizImg;
 
 	private int index;
 
@@ -104,6 +109,8 @@ public class MainFrame extends JFrame {
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
+			kalenderImg = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png"));
+			notizImg = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
