@@ -88,7 +88,7 @@ public class Main {
 
 			br = new BufferedReader(new FileReader(SIA));
 			String text = br.readLine();
-			System.out.println(text);
+
 			if (text == null) {
 				MainFrame frame = new MainFrame();
 				frame.setVisible(true);

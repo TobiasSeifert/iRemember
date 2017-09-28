@@ -124,9 +124,6 @@ public class MainFrame extends JFrame {
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
 			width = Integer.parseInt(bufr.readLine());
 			height = Integer.parseInt(bufr.readLine());
-
-			System.out.println(bufr.readLine());
-			System.out.println(bufr.readLine());
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
