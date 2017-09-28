@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
@@ -24,6 +25,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -42,6 +45,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import DataStructures.Notiz;
 import DataStructures.NotizListRenderer;
@@ -59,7 +64,7 @@ public class MainFrame extends JFrame {
 
 	private int index;
 
-	private NotizListe<Notiz> notizListe = new NotizListe<Notiz>();
+	private List<Notiz> notizListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
@@ -201,6 +206,7 @@ public class MainFrame extends JFrame {
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
+		filter.setText("");
 		filter.setPreferredSize(new Dimension(250, 40));
 		filter.setMaximumSize(new Dimension(250, 40));
 
@@ -324,6 +330,7 @@ public class MainFrame extends JFrame {
 		jahrRight.addActionListener(new plusYearButtonListener());
 		jahrLeft.addActionListener(new minusYearButtonListener());
 		sortierung.addActionListener(new sortierungEinstellen());
+		filter.addCaretListener(new listeFiltern());
 
 	}
 
@@ -337,20 +344,89 @@ public class MainFrame extends JFrame {
 			}
 		} else if (sortierung.getSelectedItem().equals("nach alt")) {
 			for (int i = notizListe.size(); i > 0; i--) {
-				listModel.addElement(notizListe.get(i-1));
+				listModel.addElement(notizListe.get(i - 1));
 			}
 		}
 		notizAnzeige.setModel(listModel);
 	}
-	
+
 	// Listener
+	public class listeFiltern implements CaretListener {
+
+		@Override
+		public void caretUpdate(CaretEvent e) {
+
+			String filtertxt = filter.getText();
+			char[] filterarray = filtertxt.toCharArray();
+			int filterLänge = filterarray.length;
+			int notizPosition = 1;
+
+			if (filtertxt.length() > 0) {
+
+				listModel.clear();
+				notizAnzeige.setCellRenderer(new NotizListRenderer());
+
+				for (int i = 0; i < notizListe.size(); i++) {
+
+					String notiztxt = notizListe.get(i).getNotiz();
+					char[] notizarray = notiztxt.toCharArray();
+
+					if (notiztxt.length() >= filtertxt.length()) {
+
+						notizSchleife: { // dieses dumme CodeLabel ist essentiell!
+							for (int j = 0; j < notizarray.length; j++) {
+
+								if (filterarray[0] == notizarray[j]) {
+
+									if (filtertxt.length() == 1) {
+
+										listModel.addElement(notizListe.get(i));
+										break;
+
+									}
+									if (filtertxt.length() > 1) {
+										for (int k = 0; k < filterLänge - 1; k++) {
+											if (notizarray[notizPosition + k] != filterarray[k + 1]) {
+												break notizSchleife;
+
+											}
+											System.out.println(k);
+											if (k == filterLänge - 2) {
+												listModel.addElement(notizListe.get(i));
+												break notizSchleife;
+
+											}
+
+										}
+
+										notizPosition++;
+
+									}
+								}
+							}
+						}
+					}
+				}
+
+				notizAnzeige.setModel(listModel);
+
+			} else if (filtertxt.length() <= 0) {
+
+				notizenEinfügen();
+
+			}
+
+		}
+
+	}
+
 	public class sortierungEinstellen implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			notizenEinfügen();
 		}
-		
+
 	}
 
 	public class notizAnwaehlen implements MouseListener {
