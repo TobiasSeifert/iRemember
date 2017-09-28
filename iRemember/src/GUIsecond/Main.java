@@ -68,7 +68,8 @@ public class Main {
 				fw.flush();
 				fw.close();
 				fw = new FileWriter(properties);
-				fw.write("600" + System.lineSeparator() + "800");
+				fw.write("Window_Width: 600" + System.lineSeparator() + "Window_Height: 800" + System.lineSeparator()
+						+ "Window_Location_X: 950" + System.lineSeparator() + "Window_Location_Y: 500");
 				fw.flush();
 				fw.close();
 			} catch (IOException e) {

@@ -100,14 +100,14 @@ public class MainFrame extends JFrame {
 	private JLabel status;
 	private JButton beenden;
 
-	private int width, height;
+	private int width, height, Window_Location_X, Window_Location_Y;
 
 	public MainFrame() {
-		setHeight_Width();
+		setHeight_Width_Location();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setLocation(300, 200);
+		setLocation(Window_Location_X, Window_Location_Y);
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
@@ -125,16 +125,19 @@ public class MainFrame extends JFrame {
 
 		addWindowListener(new TrayListener(this));
 
-		setSize(height, width);
+		setSize(width, height);
 		// pack();
 
 	}
 
-	private void setHeight_Width() {
+	private void setHeight_Width_Location() {
 		try {
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
-			width = Integer.parseInt(bufr.readLine());
-			height = Integer.parseInt(bufr.readLine());
+			// width = Integer.parseInt(bufr.readLine());
+			width = Integer.parseInt(bufr.readLine().substring(14));
+			height = Integer.parseInt(bufr.readLine().substring(15));
+			Window_Location_X = Integer.parseInt(bufr.readLine().substring(20));
+			Window_Location_Y = Integer.parseInt(bufr.readLine().substring(20));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -206,10 +209,10 @@ public class MainFrame extends JFrame {
 
 		jahre = new JComboBox<Integer>(new Integer[] { 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 });
 		jahre.setSelectedItem(new GregorianCalendar().get(Calendar.YEAR));
-		
+
 		monate = new JComboBox<String>(new String[] { "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli",
 				"August", "September", "Oktober", "November", "Dezember" });
-		
+
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
 		notizEingabe = new JTextArea();
@@ -277,7 +280,7 @@ public class MainFrame extends JFrame {
 		abbrechen.addActionListener(new notizAbbrechen());
 		monate.addActionListener(new monthDropDownListener());
 		jahre.addActionListener(new monthDropDownListener());
-		
+
 	}
 
 	// Listener
@@ -479,7 +482,9 @@ public class MainFrame extends JFrame {
 				fw.flush();
 				fw.close();
 				fw = new FileWriter(Main.properties);
-				fw.write(getContentPane().getHeight() + System.lineSeparator() + getContentPane().getWidth());
+				fw.write("Window_Width: " + getWidth() + System.lineSeparator() + "Window_Height: " + getHeight()
+						+ System.lineSeparator() + "Window_Locastion_X: " + (int) getLocation().getX()
+						+ System.lineSeparator() + "Window_Locastion_Y: " + (int) getLocation().getY());
 
 				fw.close();
 
@@ -493,28 +498,29 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
+
 	private class monthDropDownListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
 			String monat = (String) monate.getSelectedItem();
+
 			int jahr = (int)jahre.getSelectedItem();
 //			System.out.println(monat);
 //			System.out.println(jahr);
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
-//			kalender.createWidgets();
-//			kalender.addWidgets();
-//			kalender.validate();
-//			kalender.repaint();
-//			kalender.getM
+			// kalender.createWidgets();
+			// kalender.addWidgets();
+			// kalender.validate();
+			// kalender.repaint();
+			// kalender.getM
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
 		}
-		
+
 	}
-	
+
 }
