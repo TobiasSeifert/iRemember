@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -119,7 +120,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 
 		setHeight_Width_Location();
-		setLayout(new BorderLayout(5, 5));
+		setLayout(new BorderLayout(2,2));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocation(Window_Location_X, Window_Location_Y);
@@ -215,12 +216,16 @@ public class MainFrame extends JFrame {
 
 		mainViewNotizen = new JPanel();
 		mainViewNotizen.setLayout(new BoxLayout(mainViewNotizen, BoxLayout.Y_AXIS));
+		mainViewNotizen.setBackground(Color.BLACK);
 
 		mainViewKalender = new JPanel();
 		mainViewKalender.setLayout(new BoxLayout(mainViewKalender, BoxLayout.Y_AXIS));
+		mainViewKalender.setBackground(Color.BLACK);
 
 		sideBar = new JPanel();
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
+		sideBar.setOpaque(true);
+		sideBar.setBackground(Color.BLACK);
 
 		header = new JLabel("iRemember");
 		header.setHorizontalAlignment(SwingConstants.CENTER);
@@ -234,16 +239,20 @@ public class MainFrame extends JFrame {
 		notizenBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		notizenBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		notizenBtn.setForeground(Color.GREEN);
+		notizenBtn.setAlignmentX(CENTER_ALIGNMENT);
 
 		kalenderBtn = new JButton();
 		kalenderBtn.setIcon(kalenderIcon);
 		kalenderBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		kalenderBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		kalenderBtn.setForeground(Color.GREEN);
+		kalenderBtn.setAlignmentX(CENTER_ALIGNMENT);
 
+		
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
 		notizenTop.setMaximumSize(new Dimension(1920, 50));
+		notizenTop.setBackground(Color.BLACK);
 
 		einlesenProgBar = new JProgressBar(0, 100);
 
@@ -261,9 +270,11 @@ public class MainFrame extends JFrame {
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
 		notizenBottom.setMaximumSize(new Dimension(1920, 200));
 		notizenBottom.setPreferredSize(new Dimension(1920, 200));
+		notizenBottom.setBackground(Color.BLACK);
 
 		beenden = new JButton();
 		beenden.setIcon(exitIcon);
+		beenden.setAlignmentX(CENTER_ALIGNMENT);
 
 		kalender = new MonatsFeld();
 
@@ -311,6 +322,9 @@ public class MainFrame extends JFrame {
 		monatLeft.setIcon(leftIcon);
 
 		status = new JLabel();
+		status.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1, true));
+		status.setAlignmentX(CENTER_ALIGNMENT);
+		status.setForeground(Color.WHITE);
 	}
 
 	public void addWidgets() {
@@ -848,7 +862,7 @@ public class MainFrame extends JFrame {
 		@Override
 		protected MonatsFeld doInBackground() throws Exception {
 			while (true) {
-				status.setText("<html><body>Status:<br>Notizen: " + notizListe.size() + "<br>Angezeigt: "
+				status.setText("<html><body>Status:<br>Notizen   : " + notizListe.size() + "<br>Angezeigt: "
 						+ notizAnzeige.getModel().getSize() + "</body></html>");
 				gc = new GregorianCalendar();
 				if (!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))) {
