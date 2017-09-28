@@ -509,15 +509,10 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			String monat = (String) monate.getSelectedItem();
-<<<<<<< HEAD
-			int jahr = (int) jahre.getSelectedItem();
-			System.out.println(monat);
-			System.out.println(jahr);
-=======
+
 			int jahr = (int)jahre.getSelectedItem();
 //			System.out.println(monat);
 //			System.out.println(jahr);
->>>>>>> 67390fdf9d0be1b25bcc7290d1ca6c708705e067
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 			// kalender.createWidgets();
