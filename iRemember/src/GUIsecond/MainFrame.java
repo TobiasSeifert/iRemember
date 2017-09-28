@@ -302,14 +302,9 @@ public class MainFrame extends JFrame {
 		abbrechen.addActionListener(new notizAbbrechen());
 		monate.addActionListener(new monthDropDownListener());
 		jahre.addActionListener(new monthDropDownListener());
-<<<<<<< HEAD
 		monatRight.addActionListener(new plusMonthButtonListener());
 		monatLeft.addActionListener(new minusMonthButtonListener());
-		
-		
-=======
 
->>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 	}
 
 	// Listener
@@ -539,22 +534,12 @@ public class MainFrame extends JFrame {
 			
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
-<<<<<<< HEAD
-
-=======
-			// kalender.createWidgets();
-			// kalender.addWidgets();
-			// kalender.validate();
-			// kalender.repaint();
-			// kalender.getM
->>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 			mainViewKalender.add(kalender);
 			mainLayout.show(mainView, "notizen");
 			mainLayout.show(mainView, "kalender");
 		}
 
 	}
-<<<<<<< HEAD
 	
 	private class plusMonthButtonListener implements ActionListener{
 
@@ -631,8 +616,5 @@ public class MainFrame extends JFrame {
 		}
 		
 	}
-	
-=======
 
->>>>>>> 608954e19d7ed7354a5e025f3eecc2f6527dbaaf
 }
