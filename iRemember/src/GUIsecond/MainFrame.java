@@ -170,7 +170,7 @@ public class MainFrame extends JFrame {
 		}
 		
 		
-		for(int i = 0; i < value; i++) {
+		for(int i = 0; i <= value; i++) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 				
@@ -178,8 +178,9 @@ public class MainFrame extends JFrame {
 				notizListe.add(n);
 				
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("keine datei mit nummer "+ i); 
+//				e.printStackTrace();
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
