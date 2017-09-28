@@ -321,6 +321,8 @@ public class MainFrame extends JFrame {
 		jahre.addActionListener(new monthDropDownListener());
 		monatRight.addActionListener(new plusMonthButtonListener());
 		monatLeft.addActionListener(new minusMonthButtonListener());
+		jahrRight.addActionListener(new plusYearButtonListener());
+		jahrLeft.addActionListener(new minusYearButtonListener());
 
 	}
 
@@ -633,5 +635,42 @@ public class MainFrame extends JFrame {
 		}
 
 	}
+	
+	private class plusYearButtonListener implements ActionListener{
 
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String monat = (String) monate.getSelectedItem();
+			int jahr = (int) jahre.getSelectedItem()+1;
+			jahre.setSelectedIndex(jahre.getSelectedIndex()+1);
+			
+			
+			mainViewKalender.remove(kalender);
+			kalender = new MonatsFeld(monat, jahr);
+			mainViewKalender.add(kalender);
+			mainLayout.show(mainView, "notizen");
+			mainLayout.show(mainView, "kalender");
+			
+		}
+		
+	}
+
+	private class minusYearButtonListener implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String monat = (String) monate.getSelectedItem();
+
+			int jahr = (int) jahre.getSelectedItem()-1;
+			jahre.setSelectedIndex(jahre.getSelectedIndex()-1);
+
+			mainViewKalender.remove(kalender);
+			kalender = new MonatsFeld(monat, jahr);
+			mainViewKalender.add(kalender);
+			mainLayout.show(mainView, "notizen");
+			mainLayout.show(mainView, "kalender");
+			
+		}
+		
+	}
 }
