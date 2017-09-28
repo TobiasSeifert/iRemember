@@ -35,7 +35,7 @@ public class MonatsFeld extends JPanel {
 	
 	public MonatsFeld() {
 		this.tag =  heute.get(Calendar.DAY_OF_MONTH);
-		this.monat = monat = heute.get(Calendar.MONTH);
+		this.monat = heute.get(Calendar.MONTH);
 		this.jahr = heute.get(Calendar.YEAR);
 		this.cal = new GregorianCalendar(2018,0,1);
 		cal.set(jahr,  monat, tag);

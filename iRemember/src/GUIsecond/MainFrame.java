@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.MenuItem;
@@ -16,6 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -28,6 +30,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -47,6 +50,10 @@ import gui.MonatsFeld;
 
 @SuppressWarnings("serial")
 public class MainFrame extends JFrame {
+	
+	private ImageIcon kalenderIcon;
+	private ImageIcon notizIcon;
+	private ImageIcon exitIcon;
 
 	private int index;
 
@@ -104,6 +111,10 @@ public class MainFrame extends JFrame {
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
+			kalenderIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/kalender.png")));
+			notizIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/notiz.png")));
+			exitIcon = new ImageIcon(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/exit.png")));
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -158,29 +169,39 @@ public class MainFrame extends JFrame {
 		header.setBackground(Color.BLACK);
 		header.setForeground(Color.WHITE);
 
-		notizenBtn = new JButton("Notizen");
+		notizenBtn = new JButton();
+		notizenBtn.setIcon(notizIcon);
 		notizenBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		notizenBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		notizenBtn.setForeground(Color.GREEN);
 
-		kalenderBtn = new JButton("Kalender");
+		kalenderBtn = new JButton();
+		kalenderBtn.setIcon(kalenderIcon);
 		kalenderBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		kalenderBtn.setFont(header.getFont().deriveFont(Font.BOLD, 20));
 		kalenderBtn.setForeground(Color.GREEN);
 
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
+		notizenTop.setMaximumSize(new Dimension(1920, 50));
 
 		einlesenProgBar = new JProgressBar(0, 100);
 
 		filter = new JTextField();
+		filter.setPreferredSize(new Dimension (250, 40));
+		filter.setMaximumSize(new Dimension(250, 40));
 
 		sortierung = new JComboBox<String>(new String[] { "nach neu", "nach alt" });
+		sortierung.setPreferredSize(new Dimension(100, 40));
+		sortierung.setMaximumSize(new Dimension(250, 40));
 
 		notizenBottom = new JPanel();
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
+		notizenBottom.setMaximumSize(new Dimension(1920, 200));
+		notizenBottom.setPreferredSize(new Dimension(1920, 200));
 
-		beenden = new JButton("Exit");
+		beenden = new JButton();
+		beenden.setIcon(exitIcon);
 
 		status = new JLabel("Status");
 
@@ -231,7 +252,8 @@ public class MainFrame extends JFrame {
 		mainViewNotizen.add(notizScrollBar);
 		mainViewNotizen.add(einlesenProgBar);
 		mainViewNotizen.add(notizenBottom);
-
+		
+		notizenTop.add(Box.createHorizontalGlue());
 		notizenTop.add(filter);
 		notizenTop.add(sortierung);
 
@@ -487,9 +509,15 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			String monat = (String) monate.getSelectedItem();
+<<<<<<< HEAD
 			int jahr = (int) jahre.getSelectedItem();
 			System.out.println(monat);
 			System.out.println(jahr);
+=======
+			int jahr = (int)jahre.getSelectedItem();
+//			System.out.println(monat);
+//			System.out.println(jahr);
+>>>>>>> 67390fdf9d0be1b25bcc7290d1ca6c708705e067
 			mainViewKalender.remove(kalender);
 			kalender = new MonatsFeld(monat, jahr);
 			// kalender.createWidgets();
