@@ -24,6 +24,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -41,6 +42,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
 import DataStructures.Notiz;
@@ -136,7 +138,7 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-
+		new aktualisieren1().execute();
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
@@ -625,8 +627,7 @@ public class MainFrame extends JFrame {
 			if (!(monate.getSelectedIndex() - 1 < 0)) {
 				String monat = monate.getItemAt(monate.getSelectedIndex() - 1);
 				monate.setSelectedIndex(monate.getSelectedIndex() - 1);
-				System.out.println(monat);
-
+				
 				int jahr = (int) jahre.getSelectedItem();
 
 				mainViewKalender.remove(kalender);
@@ -639,7 +640,7 @@ public class MainFrame extends JFrame {
 			} else {
 				String monat = monate.getItemAt(11);
 				monate.setSelectedIndex(11);
-				System.out.println(monat);
+				
 
 				int jahr = (int) jahre.getSelectedItem() - 1;
 				jahre.setSelectedIndex(jahre.getSelectedIndex() - 1);
@@ -692,5 +693,72 @@ public class MainFrame extends JFrame {
 
 		}
 
+	}
+	
+	private class aktualisieren1 extends SwingWorker<MonatsFeld, Integer> {
+
+		private GregorianCalendar gc; 
+
+		@Override
+		protected MonatsFeld doInBackground() throws Exception {
+			while(true) {
+				gc = new GregorianCalendar();
+				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
+					
+					
+					mainViewKalender.remove(kalender);
+					kalender = new MonatsFeld();
+					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
+					monate.setSelectedItem(kalender.getHeute().get(Calendar.MONTH));
+					return kalender;
+				}	
+			}
+		}
+
+		protected void done() {
+			try {
+				kalender = get();
+			} catch (InterruptedException | ExecutionException e) {
+				e.printStackTrace();
+			}finally {
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				new aktualisieren2().execute();
+			}
+		}		
+	}
+	
+	private class aktualisieren2 extends SwingWorker<MonatsFeld, Integer> {
+
+		private GregorianCalendar gc; 
+		
+		@Override	
+		protected MonatsFeld doInBackground() throws Exception {
+			while(true) {
+				gc = new GregorianCalendar();
+				if(!(gc.get(Calendar.DAY_OF_MONTH) == kalender.getHeute().get(Calendar.DAY_OF_MONTH))){
+					mainViewKalender.remove(kalender);
+					kalender = new MonatsFeld();
+					jahre.setSelectedItem(kalender.getHeute().get(Calendar.YEAR));
+					monate.setSelectedItem(kalender.getHeute().get(Calendar.MONTH));
+					return kalender;
+				}
+			}
+		}
+
+		protected void done() {
+			try {
+				kalender = get();
+			} catch (InterruptedException | ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				mainViewKalender.add(kalender);
+				mainLayout.show(mainView, "notizen");
+				mainLayout.show(mainView, "kalender");
+				new aktualisieren1().execute();
+			}
+		}		
 	}
 }
