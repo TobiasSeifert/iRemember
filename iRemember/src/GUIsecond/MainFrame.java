@@ -66,6 +66,7 @@ public class MainFrame extends JFrame {
 	private int index;
 
 	private List<Notiz> notizListe = new NotizListe<Notiz>();
+	private List<Notiz> flüchtigeListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
@@ -482,7 +483,7 @@ public class MainFrame extends JFrame {
 				abbrechen.setEnabled(true);
 				notizEingabe.setEnabled(true);
 				erstellen.setText("Bearbeiten");
-				notizEingabe.setText(notizListe.get(index).getNotiz());
+				notizEingabe.setText(notizAnzeige.getModel().getElementAt(index).getNotiz());
 			}
 		}
 
