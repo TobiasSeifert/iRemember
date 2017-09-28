@@ -44,6 +44,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.CaretEvent;
@@ -116,7 +117,7 @@ public class MainFrame extends JFrame {
 	private String list_sorting;
 
 	public MainFrame() {
-
+		setEnabled(false);
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(5, 5));
 		setTitle("iRemember");
@@ -143,13 +144,13 @@ public class MainFrame extends JFrame {
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-		loadNotes();
 
 		new aktualisieren1().execute();
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
 		// pack();
+		loadNotes();
 
 	}
 
@@ -175,6 +176,10 @@ public class MainFrame extends JFrame {
 				Notiz n = new Notiz(br.readLine());
 				notizListe.add(n);
 
+				changeProgressBar(value, i);
+
+				setEnabled(true);
+
 			} catch (FileNotFoundException e) {
 				System.out.println(i + " = Ende der Notiz-Liste");
 				// e.printStackTrace();
@@ -185,6 +190,28 @@ public class MainFrame extends JFrame {
 			}
 		}
 		notizenEinfügen();
+
+		// changeProgressBar(value);
+
+	}
+
+	private void changeProgressBar(int value, int i) {
+
+		new Thread(new Runnable() {
+			int prozentsatz;
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (value == 0) {
+					prozentsatz = 100;
+				} else {
+					prozentsatz = 100 / value;
+				}
+				einlesenProgBar.setValue(prozentsatz * (i + 1));
+
+			}
+		}).start();
 
 	}
 
