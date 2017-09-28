@@ -38,12 +38,15 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	}
 	
-//	@Override
-//	public E remove(int index) {
-//		super.remove(index);
-//		
-//		
-//	}
+	@Override
+	public E remove(int index) {
+		
+		
+		
+		return super.remove(index);
+		
+		
+	}
 
 	@Override
 	public boolean add(E e) {
