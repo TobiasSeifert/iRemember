@@ -59,6 +59,10 @@ public class MonatsFeld extends JPanel {
 		for(int i=0; i<datumFeld.length; i++) {
 			for(int j=0; j<datumFeld[i].length; j++) {
 				if(!(datumFeld[i][j]==null)) {
+					if(heute.get(Calendar.YEAR) == jahr && heute.get(Calendar.MONTH) == monat && datumFeld[i][j].getMonatsTag() == heute.get(Calendar.DAY_OF_MONTH)) {
+						datumFeld[i][j].setBackground(Color.BLUE);
+						
+					}	
 					add(datumFeld[i][j]);
 				}else {
 					add(new JButton()).setEnabled(false);
