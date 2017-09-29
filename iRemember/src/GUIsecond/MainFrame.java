@@ -565,9 +565,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("String " + listModel.get(index).getName());
 			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			System.out.println("Zahl " +zuLöschen);
 			notizListe.setZuLöschen(zuLöschen);
 			notizListe.remove(index);
 			notizenEinfügen();
