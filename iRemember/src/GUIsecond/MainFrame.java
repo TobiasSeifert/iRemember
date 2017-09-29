@@ -119,7 +119,7 @@ public class MainFrame extends JFrame {
 	private String list_sorting;
 
 	public MainFrame() {
-		setEnabled(false);
+		
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(2,2));
 		setTitle("iRemember");
@@ -152,50 +152,11 @@ public class MainFrame extends JFrame {
 
 		setSize(width, height);
 		// pack();
-		loadNotes();
+		
 
 	}
 
-	private void loadNotes() {
-
-		int value;
-
-		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
-
-		try {
-			value = directory.listFiles().length;
-
-		} catch (NullPointerException e) {
-			value = 0;
-			System.out.println("value = 0");
-		}
-
-		for (int i = 0; i <= value; i++) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(
-						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-
-				Notiz n = new Notiz(br.readLine());
-				notizListe.add(n);
-
-				changeProgressBar(value, i);
-
-				setEnabled(true);
-
-			} catch (FileNotFoundException e) {
-				System.out.println(i + " = Ende der Notiz-Liste");
-				// e.printStackTrace();
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		notizenEinfügen();
-
-		// changeProgressBar(value);
-
-	}
+	
 
 	private void changeProgressBar(int value, int i) {
 
