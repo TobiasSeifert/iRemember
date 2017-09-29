@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.Border;
@@ -30,8 +31,10 @@ public class NotizListRenderer extends JTextArea implements ListCellRenderer {
 		this.setLineWrap(true);
 		this.setWrapStyleWord(true);
 		this.setRows(5);
+		
+		JScrollPane scrollArea = new JScrollPane(this);
 
-		return this;
+		return scrollArea;
 	}
 
 }

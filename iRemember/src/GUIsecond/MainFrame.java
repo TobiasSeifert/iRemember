@@ -463,7 +463,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void caretUpdate(CaretEvent e) {
-
+			System.out.println(notizEingabe.getRows());
 			String filtertxt = filter.getText();
 			char[] filterarray = filtertxt.toCharArray();
 			int filterLänge = filterarray.length;
