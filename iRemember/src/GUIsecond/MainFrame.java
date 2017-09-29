@@ -200,6 +200,17 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void run() {
+				int j;
+				int zaehler = 0;
+				if(notizListe.size()>0) {
+					j = 100/notizListe.size();
+//					notizenEinfügen(zaehler);
+//					System.out.println(zaehler);
+//					zaehler++;
+				}else {
+					j = 100;
+				}
+				
 				for (int i = 0; i <= 100; i++) {
 					einlesenProgBar.setValue(i);
 					einlesenProgBar.setString("Lesevorgang bei: " + i + "%");
@@ -209,9 +220,26 @@ public class MainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					if(i == j && notizListe.size()>0) {
+						
+						notizenEinfügen(zaehler);
+						System.out.println(zaehler);
+						j += j;
+						zaehler++;
+						
+					}
+					
+					if(i==100) {
+						notizenEinfügen(notizListe.size()-1);
+					}
+						
 				}
+//				if(zaehler>0) {
+//					notizenEinfügen(zaehler);
+//				}
 				setEnabled(true);
-				notizenEinfügen();
+//				notizenEinfügen();
 			}
 		}.start();
 
@@ -434,6 +462,24 @@ public class MainFrame extends JFrame {
 		}
 		notizAnzeige.setModel(listModel);
 	}
+	
+	
+	public void notizenEinfügen(int index) {
+
+		
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+		if (sortierung.getSelectedItem().equals("nach neu")) {
+			
+				listModel.addElement(notizListe.get(index));
+			
+		} else if (sortierung.getSelectedItem().equals("nach alt")) {
+			
+				listModel.addElement(notizListe.get(notizListe.size()-1 - index));
+			
+		}
+		notizAnzeige.setModel(listModel);
+	}
+	
 
 	// Listener
 	public class listeFiltern implements CaretListener {
