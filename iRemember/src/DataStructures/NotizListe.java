@@ -8,6 +8,7 @@ import java.util.ArrayList;
 @SuppressWarnings("serial")
 public class NotizListe<E extends Notiz> extends ArrayList<E> {
 	File note_save;
+	private int zuLöschen;
 
 	public NotizListe() {
 
@@ -43,8 +44,7 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	@Override
 	public E remove(int index) {
-		System.out.println(index);
-		File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + index + ".txt");
+		File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + zuLöschen + ".txt");
 		f.delete();
 
 		return super.remove(index);
@@ -64,6 +64,14 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	public void saveNotes() {
 
+	}
+
+	public int getZuLöschen() {
+		return zuLöschen;
+	}
+
+	public void setZuLöschen(int zuLöschen) {
+		this.zuLöschen = zuLöschen;
 	}
 
 }
