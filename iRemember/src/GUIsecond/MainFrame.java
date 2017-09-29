@@ -180,6 +180,7 @@ public class MainFrame extends JFrame {
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
 				Notiz n = new Notiz(br.readLine());
+				n.setName(String.valueOf(i));
 				notizListe.add(n);
 
 			} catch (FileNotFoundException e) {
