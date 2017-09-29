@@ -40,6 +40,7 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	@Override
 	public E remove(int index) {
+		System.out.println(index);
 		File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + index + ".txt");
 		f.delete();
 
