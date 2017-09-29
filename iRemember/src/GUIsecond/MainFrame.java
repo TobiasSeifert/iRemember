@@ -118,16 +118,17 @@ public class MainFrame extends JFrame {
 	private int width, height, Window_Location_X, Window_Location_Y;
 	private String list_sorting;
 
+	Color panels = new Color(209, 209, 209);
+	Color headerc = new Color(28, 134, 238);
+
 	public MainFrame() {
-		
+
 		setEnabled(false);
 		setHeight_Width_Location();
-		setLayout(new BorderLayout(2,2));
+		setLayout(new BorderLayout(2, 2));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocation(Window_Location_X, Window_Location_Y);
-		
-		
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
@@ -145,11 +146,11 @@ public class MainFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-		
+
 		new aktualisieren1().execute();
 		addWindowListener(new TrayListener(this));
 
@@ -160,66 +161,47 @@ public class MainFrame extends JFrame {
 
 	}
 
-	
-
-	
-	
-
 	private void loadNotes() {
 		int value;
-		
-				File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
-		
-				try {
-					value = directory.listFiles().length;
-		
-				} catch (NullPointerException e) {
-				value = 0;
-					System.out.println("value = 0");
-				}
-		
-				for (int i = 0; i <= value; i++) {
-					try {
-						BufferedReader br = new BufferedReader(new FileReader(
-								System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-		
-						Notiz n = new Notiz(br.readLine());
-						notizListe.add(n);
-		
-						
-		
-						
-		
-					} catch (FileNotFoundException e) {
-						System.out.println(i + " = Ende der Notiz-Liste");
-						// e.printStackTrace();
-		
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-	
-				
-		
+
+		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
+
+		try {
+			value = directory.listFiles().length;
+
+		} catch (NullPointerException e) {
+			value = 0;
+			System.out.println("value = 0");
+		}
+
+		for (int i = 0; i <= value; i++) {
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(
+						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+
+				Notiz n = new Notiz(br.readLine());
+				notizListe.add(n);
+
+			} catch (FileNotFoundException e) {
+				System.out.println(i + " = Ende der Notiz-Liste");
+				// e.printStackTrace();
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		
-	
+		}
 
-
-
-
-
+	}
 
 	private void changeProgressBar() {
 		new Thread() {
-			
+
 			@Override
 			public void run() {
-				for(int i = 0; i <= 100; i++) {
+				for (int i = 0; i <= 100; i++) {
 					einlesenProgBar.setValue(i);
-					einlesenProgBar.setString("Lesevorgang bei: " + i+ "%");
+					einlesenProgBar.setString("Lesevorgang bei: " + i + "%");
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
@@ -231,13 +213,8 @@ public class MainFrame extends JFrame {
 				notizenEinfügen();
 			}
 		}.start();
-		
+
 	}
-
-
-
-
-
 
 	private void setHeight_Width_Location() {
 		try {
@@ -265,22 +242,22 @@ public class MainFrame extends JFrame {
 
 		mainViewNotizen = new JPanel();
 		mainViewNotizen.setLayout(new BoxLayout(mainViewNotizen, BoxLayout.Y_AXIS));
-		mainViewNotizen.setBackground(Color.BLACK);
+		mainViewNotizen.setBackground(panels);
 
 		mainViewKalender = new JPanel();
 		mainViewKalender.setLayout(new BoxLayout(mainViewKalender, BoxLayout.Y_AXIS));
-		mainViewKalender.setBackground(Color.BLACK);
+		mainViewKalender.setBackground(panels);
 
 		sideBar = new JPanel();
 		sideBar.setLayout(new BoxLayout(sideBar, BoxLayout.Y_AXIS));
 		sideBar.setOpaque(true);
-		sideBar.setBackground(Color.BLACK);
+		sideBar.setBackground(panels);
 
 		header = new JLabel("iRemember");
 		header.setHorizontalAlignment(SwingConstants.CENTER);
 		header.setFont(header.getFont().deriveFont(Font.BOLD + Font.ITALIC, 30));
 		header.setOpaque(true);
-		header.setBackground(Color.BLACK);
+		header.setBackground(headerc);
 		header.setForeground(Color.WHITE);
 
 		notizenBtn = new JButton();
@@ -297,11 +274,10 @@ public class MainFrame extends JFrame {
 		kalenderBtn.setForeground(Color.GREEN);
 		kalenderBtn.setAlignmentX(CENTER_ALIGNMENT);
 
-		
 		notizenTop = new JPanel();
 		notizenTop.setLayout(new BoxLayout(notizenTop, BoxLayout.X_AXIS));
 		notizenTop.setMaximumSize(new Dimension(1920, 50));
-		notizenTop.setBackground(Color.BLACK);
+		notizenTop.setBackground(panels);
 
 		einlesenProgBar = new JProgressBar(0, 100);
 
@@ -319,7 +295,7 @@ public class MainFrame extends JFrame {
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
 		notizenBottom.setMaximumSize(new Dimension(1920, 200));
 		notizenBottom.setPreferredSize(new Dimension(1920, 200));
-		notizenBottom.setBackground(Color.BLACK);
+		notizenBottom.setBackground(panels);
 
 		beenden = new JButton();
 		beenden.setIcon(exitIcon);
