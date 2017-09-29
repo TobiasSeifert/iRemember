@@ -176,25 +176,46 @@ public class MainFrame extends JFrame {
 			System.out.println("value = 0");
 		}
 
-		for (int i = 0; i <= value; i++) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(
-						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+		if (sortierung.getSelectedItem().equals("nach neu")) {
+			for (int i = 0; i <= value; i++) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
-				Notiz n = new Notiz(br.readLine());
-				n.setName(String.valueOf(i));
-				notizListe.add(n);
+					Notiz n = new Notiz(br.readLine());
+					n.setName(String.valueOf(i));
+					notizListe.add(n);
 
-			} catch (FileNotFoundException e) {
-				System.out.println(i + " = Ende der Notiz-Liste");
-				// e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					System.out.println(i + " = Ende der Notiz-Liste");
+					// e.printStackTrace();
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		if (sortierung.getSelectedItem().equals("nach alt")) {
+			for (int i = value-1; i >= 0; i--) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
+					Notiz n = new Notiz(br.readLine());
+					n.setName(String.valueOf(i));
+					notizListe.add(n);
+
+				} catch (FileNotFoundException e) {
+					System.out.println(i + " = Ende der Notiz-Liste");
+					// e.printStackTrace();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void changeProgressBar() {
@@ -293,14 +314,13 @@ public class MainFrame extends JFrame {
 		sortierung.setPreferredSize(new Dimension(100, 40));
 		sortierung.setMaximumSize(new Dimension(250, 40));
 		sortierung.setSelectedItem(list_sorting);
-		
-		
+
 		notizenBottom = new JPanel();
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
 		notizenBottom.setMaximumSize(new Dimension(1920, 200));
 		notizenBottom.setPreferredSize(new Dimension(1920, 200));
 		notizenBottom.setBackground(panels);
-		
+
 		beenden = new JButton();
 		beenden.setIcon(exitIcon);
 		beenden.setAlignmentX(CENTER_ALIGNMENT);
@@ -317,26 +337,27 @@ public class MainFrame extends JFrame {
 
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
-		notizEingabe = new JTextArea(1,1);
+		notizEingabe = new JTextArea(1, 1);
 		notizEingabe.setEnabled(false);
 		notizEingabe.setLineWrap(true);
 		notizEingabe.setWrapStyleWord(true);
-		
+
 		notizEingabe.setDocument(new PlainDocument() {
-		    @Override
-		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		        if (str == null || notizEingabe.getText().length() >= 500) {
-		        	JOptionPane.showMessageDialog(null, "Warnung: Maximal 500 Zeichen", "Error", JOptionPane.ERROR_MESSAGE);
-		            return;
-		        }
-		 
-		        super.insertString(offs, str, a);
-		    }
+			@Override
+			public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+				if (str == null || notizEingabe.getText().length() >= 500) {
+					JOptionPane.showMessageDialog(null, "Warnung: Maximal 500 Zeichen", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				super.insertString(offs, str, a);
+			}
 		});
-		
+
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
-		
+
 		notizScrollBar = new JScrollPane(notizAnzeige);
 
 		untereKnoepfe = new JPanel();
@@ -567,7 +588,12 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
 			notizListe.setZuLöschen(zuLöschen);
-			notizListe.remove(index);
+			if (sortierung.getSelectedItem().equals("nach neu")) {
+				notizListe.remove(listModel.get(notizListe.size() - 1 - index));
+			} else if (sortierung.getSelectedItem().equals("nach alt")) {
+				System.out.println("hier");
+				notizListe.remove(listModel.get(index));
+			}
 			notizenEinfügen();
 			notizEingabe.setText("");
 			notizEingabe.setEnabled(false);
@@ -595,8 +621,9 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(notizEingabe.getText().length()>500) {
-				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung", JOptionPane.ERROR_MESSAGE);
+			if (notizEingabe.getText().length() > 500) {
+				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung",
+						JOptionPane.ERROR_MESSAGE);
 			}
 			if (erstellen.getText().equals("Erstellen")) {
 				erstellen.setText("Speichern");
