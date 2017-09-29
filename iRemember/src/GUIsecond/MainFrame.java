@@ -120,11 +120,14 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 		
+		setEnabled(false);
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(2,2));
 		setTitle("iRemember");
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		setLocation(Window_Location_X, Window_Location_Y);
+		
+		
 
 		try {
 			setIconImage(ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png")));
@@ -142,41 +145,99 @@ public class MainFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		createWidgets();
 		addWidgets();
 		setupInteractions();
-
+		
 		new aktualisieren1().execute();
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
 		// pack();
-		
+		loadNotes();
+		changeProgressBar();
 
 	}
 
 	
 
-	private void changeProgressBar(int value, int i) {
+	
+	
 
-		new Thread(new Runnable() {
-			int prozentsatz;
+	private void loadNotes() {
+		int value;
+		
+				File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
+		
+				try {
+					value = directory.listFiles().length;
+		
+				} catch (NullPointerException e) {
+				value = 0;
+					System.out.println("value = 0");
+				}
+		
+				for (int i = 0; i <= value; i++) {
+					try {
+						BufferedReader br = new BufferedReader(new FileReader(
+								System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+		
+						Notiz n = new Notiz(br.readLine());
+						notizListe.add(n);
+		
+						
+		
+						
+		
+					} catch (FileNotFoundException e) {
+						System.out.println(i + " = Ende der Notiz-Liste");
+						// e.printStackTrace();
+		
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+	
+				
+		
+			}
+		
+	
 
+
+
+
+
+
+	private void changeProgressBar() {
+		new Thread() {
+			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-				if (value == 0) {
-					prozentsatz = 100;
-				} else {
-					prozentsatz = 100 / value;
+				for(int i = 0; i <= 100; i++) {
+					einlesenProgBar.setValue(i);
+					einlesenProgBar.setString("Lesevorgang bei: " + i+ "%");
+					try {
+						Thread.sleep(20);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
-				einlesenProgBar.setValue(prozentsatz * (i + 1));
-
+				setEnabled(true);
+				notizenEinfügen();
 			}
-		}).start();
-
+		}.start();
+		
 	}
+
+
+
+
+
 
 	private void setHeight_Width_Location() {
 		try {
