@@ -180,6 +180,7 @@ public class MainFrame extends JFrame {
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
 				Notiz n = new Notiz(br.readLine());
+				n.setName(String.valueOf(i));
 				notizListe.add(n);
 
 			} catch (FileNotFoundException e) {
@@ -349,9 +350,9 @@ public class MainFrame extends JFrame {
 		monatLeft.setIcon(leftIcon);
 
 		status = new JLabel();
-		status.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1, true));
+		status.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		status.setAlignmentX(CENTER_ALIGNMENT);
-		status.setForeground(Color.WHITE);
+		status.setForeground(Color.BLACK);
 	}
 
 	public void addWidgets() {

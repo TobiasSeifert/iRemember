@@ -28,6 +28,9 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 			try {
 				FileWriter fw = new FileWriter(f);
 				fw.write(this.get(i).getNotiz());
+				fw.write(System.lineSeparator());
+				fw.write(this.get(i).getDate().toString());
+				
 				fw.flush();
 				fw.close();
 			} catch (IOException e) {
