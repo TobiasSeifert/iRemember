@@ -39,13 +39,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.CaretEvent;
@@ -70,7 +70,8 @@ public class MainFrame extends JFrame {
 
 	private int index;
 
-	private NotizListe<Notiz> notizListe = new NotizListe<Notiz>();
+	private List<Notiz> notizListe = new NotizListe<Notiz>();
+	private List<Notiz> flüchtigeListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
@@ -86,12 +87,12 @@ public class MainFrame extends JFrame {
 	private JTextField filter;
 	private JComboBox<String> sortierung;
 
+	private JScrollPane notizScrollBar;
 	private JList<Notiz> notizAnzeige;
 
 	private JProgressBar einlesenProgBar;
 
 	private JPanel notizenBottom;
-	private JScrollPane notizScrollBar;
 
 	private JTextArea notizEingabe;
 
@@ -176,7 +177,7 @@ public class MainFrame extends JFrame {
 			System.out.println("value = 0");
 		}
 
-		for (int i = 0; i <= value; i++) {
+		for (int i = 0; i < value; i++) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
@@ -293,14 +294,13 @@ public class MainFrame extends JFrame {
 		sortierung.setPreferredSize(new Dimension(100, 40));
 		sortierung.setMaximumSize(new Dimension(250, 40));
 		sortierung.setSelectedItem(list_sorting);
-		
-		
+
 		notizenBottom = new JPanel();
 		notizenBottom.setLayout(new BoxLayout(notizenBottom, BoxLayout.Y_AXIS));
 		notizenBottom.setMaximumSize(new Dimension(1920, 200));
 		notizenBottom.setPreferredSize(new Dimension(1920, 200));
 		notizenBottom.setBackground(panels);
-		
+
 		beenden = new JButton();
 		beenden.setIcon(exitIcon);
 		beenden.setAlignmentX(CENTER_ALIGNMENT);
@@ -325,19 +325,16 @@ public class MainFrame extends JFrame {
 		notizEingabe.setDocument(new PlainDocument() {
 		    @Override
 		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		        if (str == null || notizEingabe.getText().length() >= 500) {
-		        	JOptionPane.showMessageDialog(null, "Warnung: Maximal 500 Zeichen", "Error", JOptionPane.ERROR_MESSAGE);
+		        if (str == null || notizEingabe.getText().length() >= 550) {
 		            return;
 		        }
 		 
 		        super.insertString(offs, str, a);
 		    }
 		});
-		
+
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
-		
-		notizScrollBar = new JScrollPane(notizAnzeige);
 
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
@@ -347,6 +344,8 @@ public class MainFrame extends JFrame {
 		loeschen.setEnabled(false);
 		abbrechen = new JButton("Abbrechen");
 		abbrechen.setEnabled(false);
+
+		notizScrollBar = new JScrollPane(notizAnzeige);
 
 		jahrPnl = new JPanel();
 		jahrPnl.setLayout(new BoxLayout(jahrPnl, BoxLayout.X_AXIS));
@@ -565,11 +564,17 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("String " + listModel.get(index).getName());
-			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			System.out.println("Zahl " +zuLöschen);
-			notizListe.setZuLöschen(zuLöschen);
-			notizListe.remove(index);
+			//int zuLöschen = Integer.parseInt(listModel.get(index).getName());
+			
+			//notizListe.remove(zuLöschen);
+			//notizListe.remove(listModel.get(index).getName());
+			
+			for(int i = 0; i < notizListe.size(); i++) {
+				if(notizListe.get(i).getName() == listModel.get(index).getName()) {
+					notizListe.remove(i);
+				}
+			}
+			
 			notizenEinfügen();
 			notizEingabe.setText("");
 			notizEingabe.setEnabled(false);
@@ -597,9 +602,6 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(notizEingabe.getText().length()>500) {
-				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung", JOptionPane.ERROR_MESSAGE);
-			}
 			if (erstellen.getText().equals("Erstellen")) {
 				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
@@ -612,7 +614,14 @@ public class MainFrame extends JFrame {
 				String text = notizEingabe.getText();
 				if (!text.trim().equals("")) {
 					Notiz n = new Notiz(text.trim());
+					
 					notizListe.add(n);
+					
+					
+					
+					
+					
+					
 					notizenEinfügen();
 					notizEingabe.setText("");
 				}
