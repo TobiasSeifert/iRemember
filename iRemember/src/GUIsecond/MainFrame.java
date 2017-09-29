@@ -549,7 +549,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			notizListe.remove(index);
+			notizListe.remove(listModel.get(index));
 			notizenEinfügen();
 			notizEingabe.setText("");
 			notizEingabe.setEnabled(false);
