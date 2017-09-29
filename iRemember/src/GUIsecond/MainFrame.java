@@ -50,6 +50,9 @@ import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
 
 import DataStructures.Notiz;
 import DataStructures.NotizListRenderer;
@@ -318,6 +321,17 @@ public class MainFrame extends JFrame {
 		notizEingabe.setEnabled(false);
 		notizEingabe.setLineWrap(true);
 		notizEingabe.setWrapStyleWord(true);
+		
+		notizEingabe.setDocument(new PlainDocument() {
+		    @Override
+		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+		        if (str == null || notizEingabe.getText().length() >= 550) {
+		            return;
+		        }
+		 
+		        super.insertString(offs, str, a);
+		    }
+		});
 
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
