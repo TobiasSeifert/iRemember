@@ -177,25 +177,53 @@ public class MainFrame extends JFrame {
 			System.out.println("value = 0");
 		}
 
+<<<<<<< HEAD
 		for (int i = 0; i < value; i++) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+=======
+		if (sortierung.getSelectedItem().equals("nach neu")) {
+			for (int i = 0; i <= value; i++) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+>>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 
-				Notiz n = new Notiz(br.readLine());
-				n.setName(String.valueOf(i));
-				notizListe.add(n);
+					Notiz n = new Notiz(br.readLine());
+					n.setName(String.valueOf(i));
+					notizListe.add(n);
 
-			} catch (FileNotFoundException e) {
-				System.out.println(i + " = Ende der Notiz-Liste");
-				// e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					System.out.println(i + " = Ende der Notiz-Liste");
+					// e.printStackTrace();
 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
+		if (sortierung.getSelectedItem().equals("nach alt")) {
+			for (int i = value-1; i >= 0; i--) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
+					Notiz n = new Notiz(br.readLine());
+					n.setName(String.valueOf(i));
+					notizListe.add(n);
+
+				} catch (FileNotFoundException e) {
+					System.out.println(i + " = Ende der Notiz-Liste");
+					// e.printStackTrace();
+
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void changeProgressBar() {
@@ -203,6 +231,17 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void run() {
+				int j;
+				int zaehler = 0;
+				if(notizListe.size()>0) {
+					j = 100/notizListe.size();
+//					notizenEinfügen(zaehler);
+//					System.out.println(zaehler);
+//					zaehler++;
+				}else {
+					j = 100;
+				}
+				
 				for (int i = 0; i <= 100; i++) {
 					einlesenProgBar.setValue(i);
 					einlesenProgBar.setString("Lesevorgang bei: " + i + "%");
@@ -212,9 +251,26 @@ public class MainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
+					if(i == j && notizListe.size()>0) {
+						
+						notizenEinfügen(zaehler);
+						System.out.println(zaehler);
+						j += j;
+						zaehler++;
+						
+					}
+					
+					if(i==100) {
+						notizenEinfügen(notizListe.size()-1);
+					}
+						
 				}
+//				if(zaehler>0) {
+//					notizenEinfügen(zaehler);
+//				}
 				setEnabled(true);
-				notizenEinfügen();
+//				notizenEinfügen();
 			}
 		}.start();
 
@@ -317,12 +373,13 @@ public class MainFrame extends JFrame {
 
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
-		notizEingabe = new JTextArea(1,1);
+		notizEingabe = new JTextArea(1, 1);
 		notizEingabe.setEnabled(false);
 		notizEingabe.setLineWrap(true);
 		notizEingabe.setWrapStyleWord(true);
-		
+
 		notizEingabe.setDocument(new PlainDocument() {
+<<<<<<< HEAD
 		    @Override
 		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 		        if (str == null || notizEingabe.getText().length() >= 550) {
@@ -331,10 +388,27 @@ public class MainFrame extends JFrame {
 		 
 		        super.insertString(offs, str, a);
 		    }
+=======
+			@Override
+			public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+				if (str == null || notizEingabe.getText().length() >= 500) {
+					JOptionPane.showMessageDialog(null, "Warnung: Maximal 500 Zeichen", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				super.insertString(offs, str, a);
+			}
+>>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 		});
 
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
+<<<<<<< HEAD
+=======
+
+		notizScrollBar = new JScrollPane(notizAnzeige);
+>>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
@@ -448,6 +522,24 @@ public class MainFrame extends JFrame {
 		}
 		notizAnzeige.setModel(listModel);
 	}
+	
+	
+	public void notizenEinfügen(int index) {
+
+		
+		notizAnzeige.setCellRenderer(new NotizListRenderer());
+		if (sortierung.getSelectedItem().equals("nach neu")) {
+			
+				listModel.addElement(notizListe.get(index));
+			
+		} else if (sortierung.getSelectedItem().equals("nach alt")) {
+			
+				listModel.addElement(notizListe.get(notizListe.size()-1 - index));
+			
+		}
+		notizAnzeige.setModel(listModel);
+	}
+	
 
 	// Listener
 	public class listeFiltern implements CaretListener {
@@ -564,6 +656,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
 			//int zuLöschen = Integer.parseInt(listModel.get(index).getName());
 			
 			//notizListe.remove(zuLöschen);
@@ -575,6 +668,16 @@ public class MainFrame extends JFrame {
 				}
 			}
 			
+=======
+			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
+			notizListe.setZuLöschen(zuLöschen);
+			if (sortierung.getSelectedItem().equals("nach neu")) {
+				notizListe.remove(listModel.get(notizListe.size() - 1 - index));
+			} else if (sortierung.getSelectedItem().equals("nach alt")) {
+				System.out.println("hier");
+				notizListe.remove(listModel.get(index));
+			}
+>>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 			notizenEinfügen();
 			notizEingabe.setText("");
 			notizEingabe.setEnabled(false);
@@ -602,6 +705,13 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
+=======
+			if (notizEingabe.getText().length() > 500) {
+				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung",
+						JOptionPane.ERROR_MESSAGE);
+			}
+>>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 			if (erstellen.getText().equals("Erstellen")) {
 				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
