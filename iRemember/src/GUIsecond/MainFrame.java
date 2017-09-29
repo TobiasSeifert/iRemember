@@ -313,8 +313,10 @@ public class MainFrame extends JFrame {
 
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
-		notizEingabe = new JTextArea();
+		notizEingabe = new JTextArea(1,1);
 		notizEingabe.setEnabled(false);
+		notizEingabe.setLineWrap(true);
+		notizEingabe.setWrapStyleWord(true);
 
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());

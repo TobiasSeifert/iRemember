@@ -1,6 +1,7 @@
 package DataStructures;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JList;
@@ -22,10 +23,13 @@ public class NotizListRenderer extends JTextArea implements ListCellRenderer {
 		this.setLayout(new GridLayout());
 		this.setBorder(auﬂen);
         this.setEditable(false);
-        this.setLineWrap(true);
-        this.setWrapStyleWord(true);
         this.setOpaque(false);
 		this.setText(notiz.getNotiz());
+		this.setPreferredSize(new Dimension(1000, 100));
+		this.setMaximumSize(new Dimension(1000, 100));
+		this.setLineWrap(true);
+		this.setWrapStyleWord(true);
+		this.setRows(5);
 
 		return this;
 	}
