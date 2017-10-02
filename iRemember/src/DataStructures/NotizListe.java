@@ -5,31 +5,33 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.TreeMap;
 
 @SuppressWarnings("serial")
-public class NotizListe<E extends Notiz> extends ArrayList<E> {
+public class NotizListe<K extends String, E extends Notiz> extends TreeMap<K, E> {
 	File note_save;
-	private int zuLöschen;
 
 	public NotizListe() {
 
 	}
 
-	@SuppressWarnings("unused")
-	private void setNoteNames(E e) {
-
-		for (int i = 0; i < this.size(); i++) {
-				try {
-					@SuppressWarnings("resource")
-					BufferedReader br = new BufferedReader(new FileReader(
-							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-
-				} catch (IOException e1) {
-					e.setName(String.valueOf(i));
-				}
-		}
-	}
+//	@SuppressWarnings("unused")
+//	private void setNoteNames(E notiz) {
+//
+//		for (int i = 0; i < Integer.parseInt(this.lastKey()); i++) {
+//			if (System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt" == null) {
+//				try {
+//					@SuppressWarnings("resource")
+//					BufferedReader br = new BufferedReader(new FileReader(
+//							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+//
+//				} catch (IOException e1) {
+//					notiz.setName(String.valueOf(i));
+//					System.out.println(String.valueOf(i));
+//				}
+//			}
+//		}
+//	}
 
 	private void createNoteFiles(E e) {
 
@@ -39,17 +41,7 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 			FileWriter fw = new FileWriter(f);
 			fw.write(e.getZeitstempel());
 			fw.write(System.lineSeparator());
-//			fw.write("\r\n");
-			
 			fw.write(e.getNotiz().replaceAll("\n", System.lineSeparator()));
-			
-//			if(e.getNotiz().contains("\n")) {
-//				e.getNotiz()
-//			}
-//			fw.write(e.getNotiz());
-//			System.out.println(e.getNotiz());
-			
-			
 			fw.flush();
 			fw.close();
 		} catch (IOException es) {
@@ -59,35 +51,23 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 	}
 
 	@Override
-	public E remove(int index) {
-		File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + index + ".txt");
+	public E remove(Object key) {
+		File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + key + ".txt");
 		f.delete();
 
-		return super.remove(index);
+		return super.remove(key);
 
 	}
 
 	@Override
-	public boolean add(E e) {
+	public E put(K k, E e) {
 
-		super.add(e);
-		setNoteNames(e);
+		super.put(k, e);
+//		setNoteNames(e);
 		createNoteFiles(e);
 
-		return true;
+		return e;
 
-	}
-
-	public void saveNotes() {
-
-	}
-
-	public int getZuLöschen() {
-		return zuLöschen;
-	}
-
-	public void setZuLöschen(int zuLöschen) {
-		this.zuLöschen = zuLöschen;
 	}
 
 }
