@@ -12,6 +12,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings({ "serial", "rawtypes" })
 public class NotizListRenderer extends JTextArea implements ListCellRenderer {
 
 	@Override

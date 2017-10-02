@@ -10,9 +10,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import DataStructures.Notiz;
-import DataStructures.NotizListe;
-
 public class Main {
 
 	static FileWriter fw;
@@ -22,7 +19,6 @@ public class Main {
 	static File notes;
 
 	static BufferedReader br = null;
-	private NotizListe<Notiz> notizliste = new NotizListe<Notiz>();
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -33,16 +29,12 @@ public class Main {
 				try {
 					UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (UnsupportedLookAndFeelException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -76,7 +68,6 @@ public class Main {
 				fw.flush();
 				fw.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -87,7 +78,6 @@ public class Main {
 	}
 
 	private static void createData() {
-		// TODO Auto-generated method stub
 		try {
 
 			br = new BufferedReader(new FileReader(SIA));
@@ -104,7 +94,6 @@ public class Main {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

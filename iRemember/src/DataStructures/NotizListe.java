@@ -2,7 +2,6 @@ package DataStructures;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,7 +14,6 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	public NotizListe() {
 
-		// createNoteFiles();
 	}
 
 	@SuppressWarnings("unused")
@@ -23,6 +21,7 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 		for (int i = 0; i < this.size(); i++) {
 				try {
+					@SuppressWarnings("resource")
 					BufferedReader br = new BufferedReader(new FileReader(
 							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
@@ -31,27 +30,6 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 				}
 		}
 	}
-
-	// private void createNoteFiles() {
-	// for (int i = 0; i < this.size(); i++) {
-	// File f = new File(System.getProperty("user.home") +
-	// "\\AppData\\Roaming\\iReminder\\Notes\\"
-	// + this.get(i).getName() + ".txt");
-	// try {
-	// FileWriter fw = new FileWriter(f);
-	// fw.write(this.get(i).getNotiz());
-	// fw.write(System.lineSeparator());
-	// fw.write(this.get(i).getDate().toString());
-	//
-	// fw.flush();
-	// fw.close();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// }
 
 	private void createNoteFiles(E e) {
 
@@ -67,7 +45,6 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 			fw.flush();
 			fw.close();
 		} catch (IOException es) {
-			// TODO Auto-generated catch block
 			es.printStackTrace();
 		}
 
