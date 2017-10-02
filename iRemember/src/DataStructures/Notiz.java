@@ -9,21 +9,22 @@ import gui.MonatsFeld;
 public class Notiz {
 
 	private long timestamp;
+	private String zeitstempel;
 	private String notiz;
 	private Date date;
 	private GregorianCalendar cal;
 	private String name;
 
 	public Notiz(String notiztext) {
-		setTimestamp(System.currentTimeMillis());
 		this.setNotiz(notiztext);
-		setDate(new Date(timestamp));
-		setCal(new GregorianCalendar());
-
 	}
 
-	private void setTimestamp(long currentTimeMillis) {
+	public void setTimestamp(long currentTimeMillis) {
 		this.timestamp = currentTimeMillis;
+	}
+
+	public long getTimestamp() {
+		return timestamp;
 	}
 
 	public String getNotiz() {
@@ -48,7 +49,6 @@ public class Notiz {
 
 	public void setCal(GregorianCalendar cal) {
 		this.cal = cal;
-		cal.setTime(date);
 	}
 
 	public String checkTime(int time) {
@@ -74,4 +74,22 @@ public class Notiz {
 		this.name = name;
 	}
 
+	public void setErstellzeit() {
+		setTimestamp(System.currentTimeMillis());
+		setDate(new Date(getTimestamp()));
+		setCal(new GregorianCalendar());
+		cal.setTime(date);
+		System.out.println(toString());
+		this.setZeitstempel(toString());
+	}
+
+	public String getZeitstempel() {
+		return zeitstempel;
+	}
+
+	public void setZeitstempel(String zeitstempel) {
+		this.zeitstempel = zeitstempel;
+	}
+	
+	
 }

@@ -24,6 +24,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -183,8 +184,12 @@ public class MainFrame extends JFrame {
 				BufferedReader br = new BufferedReader(new FileReader(
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
+				
+				String str = br.readLine();
+//				while(br.) {
 				Notiz n = new Notiz(br.readLine());
 				n.setName(String.valueOf(i));
+				n.setZeitstempel(str);
 				notizListe.add(n);
 				
 			}catch(Exception e) {
@@ -676,6 +681,7 @@ public class MainFrame extends JFrame {
 				String text = notizEingabe.getText();
 				if (text.trim().length() > 0) {
 					Notiz n = new Notiz(text.trim());
+					n.setErstellzeit();
 					notizListe.add(n);
 					notizenEinfügen();
 					notizEingabe.setText("");
