@@ -180,17 +180,26 @@ public class MainFrame extends JFrame {
 		for (int i = 100; i >= 0; i--) {
 			
 			try {
-				@SuppressWarnings("resource")
-				BufferedReader br = new BufferedReader(new FileReader(
-						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+				
+				FileReader fr = new FileReader(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt");
+				BufferedReader br = new BufferedReader(fr);
 
+				StringBuilder sb = new StringBuilder();
 				
 				String str = br.readLine();
-//				while(br.) {
-				Notiz n = new Notiz(br.readLine());
+				
+				String line = null;
+				while((line = br.readLine()) != null) {
+						sb.append(line);
+				}
+				
+				Notiz n = new Notiz(sb.toString());
 				n.setName(String.valueOf(i));
 				n.setZeitstempel(str);
+				
 				notizListe.add(n);
+				br.close();
+				fr.close();
 				
 			}catch(Exception e) {
 				

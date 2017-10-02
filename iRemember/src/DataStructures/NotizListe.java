@@ -39,7 +39,15 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 			FileWriter fw = new FileWriter(f);
 			fw.write(e.getZeitstempel());
 			fw.write(System.lineSeparator());
-			fw.write(e.getNotiz());
+//			fw.write("\r\n");
+			
+			fw.write(e.getNotiz().replaceAll("\n", System.lineSeparator()));
+			
+//			if(e.getNotiz().contains("\n")) {
+//				e.getNotiz()
+//			}
+//			fw.write(e.getNotiz());
+//			System.out.println(e.getNotiz());
 			
 			
 			fw.flush();
