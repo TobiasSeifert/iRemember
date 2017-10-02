@@ -341,7 +341,6 @@ public class MainFrame extends JFrame {
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
 		notizEingabe = new JTextArea(1, 1);
-		notizEingabe.setEnabled(false);
 		notizEingabe.setLineWrap(true);
 		notizEingabe.setWrapStyleWord(true);
 
@@ -370,8 +369,9 @@ public class MainFrame extends JFrame {
 
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
-		erstellen = new JButton("Erstellen");
-		erstellen.setName("Erstellen");
+		erstellen = new JButton("Speichern");
+		erstellen.setEnabled(false);
+		erstellen.setName("Speichern");
 		loeschen = new JButton("Löschen");
 		loeschen.setEnabled(false);
 		abbrechen = new JButton("Abbrechen");
@@ -462,6 +462,7 @@ public class MainFrame extends JFrame {
 		jahrLeft.addActionListener(new minusYearButtonListener());
 		sortierung.addActionListener(new sortierungEinstellen());
 		filter.addCaretListener(new listeFiltern());
+		notizEingabe.addCaretListener(new speichernFreigeben());
 
 	}
 
@@ -502,6 +503,19 @@ public class MainFrame extends JFrame {
 	
 
 	// Listener
+	public class speichernFreigeben implements CaretListener{
+
+		@Override
+		public void caretUpdate(CaretEvent e) {
+			if(notizEingabe.getText().trim().length() > 0) {
+				erstellen.setEnabled(true);
+			}
+			
+		}
+		
+		
+	}
+	
 	public class listeFiltern implements CaretListener {
 
 		@SuppressWarnings("unchecked")
@@ -589,8 +603,8 @@ public class MainFrame extends JFrame {
 			if (notizListe.get(index).getNotiz() != null) {
 				loeschen.setEnabled(true);
 				abbrechen.setEnabled(true);
-				notizEingabe.setEnabled(true);
-				erstellen.setText("Bearbeiten");
+				erstellen.setEnabled(true);
+				erstellen.setName("Bearbeiten");
 				notizEingabe.setText(notizAnzeige.getModel().getElementAt(index).getNotiz());
 			}
 		}
@@ -627,10 +641,10 @@ public class MainFrame extends JFrame {
 
 			notizenEinfügen();
 			notizEingabe.setText("");
-			notizEingabe.setEnabled(false);
+			erstellen.setEnabled(false);
 			loeschen.setEnabled(false);
 			abbrechen.setEnabled(false);
-			erstellen.setText("Erstellen");
+			erstellen.setName("Speichern");
 		}
 
 	}
@@ -641,9 +655,9 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			abbrechen.setEnabled(false);
 			loeschen.setEnabled(false);
-			notizEingabe.setEnabled(false);
+			erstellen.setEnabled(false);
 			notizEingabe.setText("");
-			erstellen.setText("Erstellen");
+			erstellen.setName("Speichern");
 		}
 
 	}
@@ -654,44 +668,33 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 
 			if (notizEingabe.getText().length() > 500) {
-				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung",
-						JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Nicht mehr als 500 Zeichen", "Hinweis",
+						JOptionPane.INFORMATION_MESSAGE);
 			}
 
-			if (erstellen.getText().equals("Erstellen")) {
-				erstellen.setText("Speichern");
-				abbrechen.setEnabled(true);
-				notizEingabe.setEnabled(true);
-			} else if (erstellen.getText().equals("Speichern")) {
-				erstellen.setText("Erstellen");
-				abbrechen.setEnabled(false);
-				notizEingabe.setEnabled(false);
-
+			if (erstellen.getName().equals("Speichern")) {
 				String text = notizEingabe.getText();
-				if (!text.trim().equals("")) {
+				if (text.trim().length() > 0) {
 					Notiz n = new Notiz(text.trim());
-					
 					notizListe.add(n);
-					
-					
-					
-					
-					
-					
 					notizenEinfügen();
 					notizEingabe.setText("");
+					erstellen.setEnabled(false);
+				}else {
+					JOptionPane.showMessageDialog(null, "Die Notiz benötigt eine Eingabe", "Hinweis",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
-			} else if (erstellen.getText().equals("Bearbeiten")) {
-				erstellen.setText("Erstellen");
+			} else if (erstellen.getName().equals("Bearbeiten")) {
+				erstellen.setName("Speichern");
 				loeschen.setEnabled(false);
 				abbrechen.setEnabled(false);
-				notizEingabe.setEnabled(false);
 
 				String text2 = notizEingabe.getText();
 				if (!text2.trim().equals("")) {
 					notizListe.get(index).setNotiz(text2);
 					notizenEinfügen();
 					notizEingabe.setText("");
+					erstellen.setEnabled(false);
 				}
 			}
 
