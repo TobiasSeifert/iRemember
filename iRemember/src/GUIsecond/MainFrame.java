@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
 	private ImageIcon leftIcon;
 
 	private int index;
-
+//Test
 	private List<Notiz> notizListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
