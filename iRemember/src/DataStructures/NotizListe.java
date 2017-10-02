@@ -26,7 +26,8 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(
 							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-				} catch (FileNotFoundException e1) {
+					br.close();
+				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 				e.setName(String.valueOf(i));

@@ -125,7 +125,7 @@ public class MainFrame extends JFrame {
 	Color headerc = new Color(28, 134, 238);
 
 	public MainFrame() {
-
+		
 		//setEnabled(false);
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(2, 2));
@@ -523,7 +523,7 @@ public class MainFrame extends JFrame {
 
 					if (notiztxt.length() >= filtertxt.length()) {
 
-						notizSchleife: { // dieses dumme CodeLabel ist essentiell!
+						notizSchleife: {
 							for (int j = 0; j < notizarray.length; j++) {
 
 								if (filterarray[0] == notizarray[j]) {
