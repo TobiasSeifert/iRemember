@@ -39,13 +39,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.CaretEvent;
@@ -126,7 +126,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 
-		setEnabled(false);
+		//setEnabled(false);
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(2, 2));
 		setTitle("iRemember");
@@ -167,64 +167,33 @@ public class MainFrame extends JFrame {
 	private void loadNotes() {
 		int value;
 
-		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
+		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\"));
 
 		try {
-			value = directory.listFiles().length;
-
+			value = directory.list().length;
 		} catch (NullPointerException e) {
 			value = 0;
 			System.out.println("value = 0");
 		}
 
-<<<<<<< HEAD
-		for (int i = 0; i < value; i++) {
+		
+		for (int i = 100; i >= 0; i--) {
+			
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-=======
-		if (sortierung.getSelectedItem().equals("nach neu")) {
-			for (int i = 0; i <= value; i++) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(
-							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 
-					Notiz n = new Notiz(br.readLine());
-					n.setName(String.valueOf(i));
-					notizListe.add(n);
-
-				} catch (FileNotFoundException e) {
-					System.out.println(i + " = Ende der Notiz-Liste");
-					// e.printStackTrace();
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
-		if (sortierung.getSelectedItem().equals("nach alt")) {
-			for (int i = value-1; i >= 0; i--) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(
-							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-
-					Notiz n = new Notiz(br.readLine());
-					n.setName(String.valueOf(i));
-					notizListe.add(n);
-
-				} catch (FileNotFoundException e) {
-					System.out.println(i + " = Ende der Notiz-Liste");
-					// e.printStackTrace();
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				Notiz n = new Notiz(br.readLine());
+				n.setName(String.valueOf(i));
+				notizListe.add(n);
+				
+			}catch(Exception e) {
+				
 			}
 		}
 	}
+		
+	
 
 	private void changeProgressBar() {
 		new Thread() {
@@ -379,16 +348,7 @@ public class MainFrame extends JFrame {
 		notizEingabe.setWrapStyleWord(true);
 
 		notizEingabe.setDocument(new PlainDocument() {
-<<<<<<< HEAD
-		    @Override
-		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		        if (str == null || notizEingabe.getText().length() >= 550) {
-		            return;
-		        }
-		 
-		        super.insertString(offs, str, a);
-		    }
-=======
+
 			@Override
 			public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 				if (str == null || notizEingabe.getText().length() >= 500) {
@@ -399,16 +359,16 @@ public class MainFrame extends JFrame {
 
 				super.insertString(offs, str, a);
 			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+
 		});
 
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
-<<<<<<< HEAD
-=======
+
+
 
 		notizScrollBar = new JScrollPane(notizAnzeige);
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+
 
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
@@ -656,7 +616,7 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
+
 			//int zuLöschen = Integer.parseInt(listModel.get(index).getName());
 			
 			//notizListe.remove(zuLöschen);
@@ -668,16 +628,7 @@ public class MainFrame extends JFrame {
 				}
 			}
 			
-=======
-			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			notizListe.setZuLöschen(zuLöschen);
-			if (sortierung.getSelectedItem().equals("nach neu")) {
-				notizListe.remove(listModel.get(notizListe.size() - 1 - index));
-			} else if (sortierung.getSelectedItem().equals("nach alt")) {
-				System.out.println("hier");
-				notizListe.remove(listModel.get(index));
-			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+
 			notizenEinfügen();
 			notizEingabe.setText("");
 			notizEingabe.setEnabled(false);
@@ -705,13 +656,12 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-=======
+
 			if (notizEingabe.getText().length() > 500) {
 				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung",
 						JOptionPane.ERROR_MESSAGE);
 			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+
 			if (erstellen.getText().equals("Erstellen")) {
 				erstellen.setText("Speichern");
 				abbrechen.setEnabled(true);
