@@ -18,57 +18,59 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 		// createNoteFiles();
 	}
 
+	@SuppressWarnings("unused")
 	private void setNoteNames(E e) {
 
 		for (int i = 0; i < this.size(); i++) {
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(
-						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-			} catch (FileNotFoundException es) {
+			if (System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt" == null) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
 				e.setName(String.valueOf(i));
-				es.printStackTrace();
 			}
 		}
 	}
 
-//	private void createNoteFiles() {
-//		for (int i = 0; i < this.size(); i++) {
-//			File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\"
-//					+ this.get(i).getName() + ".txt");
-//			try {
-//				FileWriter fw = new FileWriter(f);
-//				fw.write(this.get(i).getNotiz());
-//				fw.write(System.lineSeparator());
-//				fw.write(this.get(i).getDate().toString());
-//				
-//				fw.flush();
-//				fw.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//
-//	}
-	
+	// private void createNoteFiles() {
+	// for (int i = 0; i < this.size(); i++) {
+	// File f = new File(System.getProperty("user.home") +
+	// "\\AppData\\Roaming\\iReminder\\Notes\\"
+	// + this.get(i).getName() + ".txt");
+	// try {
+	// FileWriter fw = new FileWriter(f);
+	// fw.write(this.get(i).getNotiz());
+	// fw.write(System.lineSeparator());
+	// fw.write(this.get(i).getDate().toString());
+	//
+	// fw.flush();
+	// fw.close();
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	//
+	// }
+
 	private void createNoteFiles(E e) {
-		
-			
-			try {
-				File f = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\"
-						+ e.getName() + ".txt");
-				FileWriter fw = new FileWriter(f);
-				fw.write(e.getNotiz());
-				fw.write(System.lineSeparator());
-				fw.write(e.getDate().toString());
-				
-				fw.flush();
-				fw.close();
-			} catch (IOException es) {
-				// TODO Auto-generated catch block
-				es.printStackTrace();
-			}
-		
+
+		try {
+			File f = new File(
+					System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + e.getName() + ".txt");
+			FileWriter fw = new FileWriter(f);
+			fw.write(e.getNotiz());
+			fw.write(System.lineSeparator());
+			fw.write(e.getDate().toString());
+
+			fw.flush();
+			fw.close();
+		} catch (IOException es) {
+			// TODO Auto-generated catch block
+			es.printStackTrace();
+		}
 
 	}
 

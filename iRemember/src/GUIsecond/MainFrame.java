@@ -231,10 +231,10 @@ public class MainFrame extends JFrame {
 				}
 				zaehler++;
 //				if(zaehler == notizListe.size()-1) {	
-					notizenEinfügen(zaehler);
+//					notizenEinfügen(zaehler);
 //				}	
 //					for(int temp = zaehler+1; temp < notizListe.size(); temp++) {
-						
+//						
 //					}
 				
 				
