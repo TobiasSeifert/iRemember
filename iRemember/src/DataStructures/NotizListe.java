@@ -27,7 +27,6 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
 				} catch (IOException e1) {
-					e1.printStackTrace();
 					e.setName(String.valueOf(i));
 				}
 		}
