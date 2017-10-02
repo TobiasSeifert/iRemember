@@ -191,6 +191,7 @@ public class MainFrame extends JFrame {
 				String line = null;
 				while((line = br.readLine()) != null) {
 						sb.append(line);
+						sb.append("\n");
 				}
 				
 				Notiz n = new Notiz(sb.toString());
