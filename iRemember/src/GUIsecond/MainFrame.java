@@ -204,8 +204,7 @@ public class MainFrame extends JFrame {
 				int zaehler = 0;
 				if(notizListe.size()>0) {
 					j = 100/notizListe.size();
-//					notizenEinfügen(zaehler);
-//					System.out.println(zaehler);
+					notizenEinfügen(zaehler);
 //					zaehler++;
 				}else {
 					j = 100;
@@ -221,25 +220,25 @@ public class MainFrame extends JFrame {
 						e.printStackTrace();
 					}
 					
-					if(i == j && notizListe.size()>0) {
-						
+					if(i == j && notizListe.size()>0 && zaehler<notizListe.size()-1) {
+						zaehler++;
 						notizenEinfügen(zaehler);
 						System.out.println(zaehler);
-						j += j;
-						zaehler++;
+						j = j+j;	
 						
-					}
-					
-					if(i==100) {
-						notizenEinfügen(notizListe.size()-1);
-					}
 						
+					}						
 				}
-//				if(zaehler>0) {
-//					notizenEinfügen(zaehler);
-//				}
+				zaehler++;
+//				if(zaehler == notizListe.size()-1) {	
+					notizenEinfügen(zaehler);
+//				}	
+//					for(int temp = zaehler+1; temp < notizListe.size(); temp++) {
+						
+//					}
+				
+				
 				setEnabled(true);
-//				notizenEinfügen();
 			}
 		}.start();
 
