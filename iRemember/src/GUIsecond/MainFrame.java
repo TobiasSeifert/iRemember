@@ -246,22 +246,20 @@ public class MainFrame extends JFrame {
 	private void setHeight_Width_Location() {
 		try {
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
-			// width = Integer.parseInt(bufr.readLine());
 			width = Integer.parseInt(bufr.readLine().substring(14));
 			height = Integer.parseInt(bufr.readLine().substring(15));
 			Window_Location_X = Integer.parseInt(bufr.readLine().substring(20));
 			Window_Location_Y = Integer.parseInt(bufr.readLine().substring(20));
 			list_sorting = bufr.readLine().substring(14);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void createWidgets() {
 
 		mainView = new JPanel();
@@ -465,6 +463,7 @@ public class MainFrame extends JFrame {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void notizenEinfügen() {
 
 		listModel.clear();
@@ -482,6 +481,7 @@ public class MainFrame extends JFrame {
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public void notizenEinfügen(int index) {
 
 		
@@ -502,6 +502,7 @@ public class MainFrame extends JFrame {
 	// Listener
 	public class listeFiltern implements CaretListener {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void caretUpdate(CaretEvent e) {
 			System.out.println(notizEingabe.getRows());

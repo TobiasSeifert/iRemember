@@ -22,16 +22,14 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 	private void setNoteNames(E e) {
 
 		for (int i = 0; i < this.size(); i++) {
-			if (System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt" == null) {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(
 							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-					br.close();
+
 				} catch (IOException e1) {
 					e1.printStackTrace();
+					e.setName(String.valueOf(i));
 				}
-				e.setName(String.valueOf(i));
-			}
 		}
 	}
 
