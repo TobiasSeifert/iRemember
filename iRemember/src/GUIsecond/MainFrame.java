@@ -487,10 +487,9 @@ public class MainFrame extends JFrame {
 	@SuppressWarnings("unchecked")
 	public void notizenEinfügen(int index) {
 
-		
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
 		if (sortierung.getSelectedItem().equals("nach neu")) {
-			
+				
 				listModel.addElement(notizListe.get(index));
 			
 		} else if (sortierung.getSelectedItem().equals("nach alt")) {
