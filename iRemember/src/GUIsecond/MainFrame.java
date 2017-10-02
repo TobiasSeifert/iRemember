@@ -179,6 +179,7 @@ public class MainFrame extends JFrame {
 		for (int i = 100; i >= 0; i--) {
 			
 			try {
+				@SuppressWarnings("resource")
 				BufferedReader br = new BufferedReader(new FileReader(
 						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
@@ -245,6 +246,7 @@ public class MainFrame extends JFrame {
 
 	private void setHeight_Width_Location() {
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
 			width = Integer.parseInt(bufr.readLine().substring(14));
 			height = Integer.parseInt(bufr.readLine().substring(15));
@@ -616,11 +618,6 @@ public class MainFrame extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 
-			//int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			
-			//notizListe.remove(zuLöschen);
-			//notizListe.remove(listModel.get(index).getName());
-			
 			for(int i = 0; i < notizListe.size(); i++) {
 				if(notizListe.get(i).getName() == listModel.get(index).getName()) {
 					notizListe.remove(i);
@@ -739,7 +736,6 @@ public class MainFrame extends JFrame {
 			try {
 				pic = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png"));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			popup.add(defaultItem);
@@ -784,8 +780,6 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			@SuppressWarnings("unused")
 			FileWriter fw;
 
 			try {
@@ -801,7 +795,6 @@ public class MainFrame extends JFrame {
 				fw.close();
 
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -997,7 +990,6 @@ public class MainFrame extends JFrame {
 			try {
 				kalender = get();
 			} catch (InterruptedException | ExecutionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				mainViewKalender.add(kalender);

@@ -23,7 +23,6 @@ public class Notiz {
 	}
 
 	private void setTimestamp(long currentTimeMillis) {
-		// TODO Auto-generated method stub
 		this.timestamp = currentTimeMillis;
 	}
 

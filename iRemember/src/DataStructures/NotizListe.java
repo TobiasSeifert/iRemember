@@ -2,7 +2,6 @@ package DataStructures;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,7 +14,6 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 	public NotizListe() {
 
-		// createNoteFiles();
 	}
 
 	@SuppressWarnings("unused")
@@ -23,6 +21,7 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 
 		for (int i = 0; i < this.size(); i++) {
 				try {
+					@SuppressWarnings("resource")
 					BufferedReader br = new BufferedReader(new FileReader(
 							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
 
