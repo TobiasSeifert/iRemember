@@ -525,12 +525,7 @@ public class MainFrame extends JFrame {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			System.out.println(notizEingabe.getRows());
-			String filtertxt = filter.getText();
-			char[] filterarray = filtertxt.toCharArray();
-			int filterLänge = filterarray.length;
-			int notizPosition = 1;
-
+			String filtertxt = filter.getText().toLowerCase();
 			if (filtertxt.length() > 0) {
 
 				listModel.clear();
@@ -538,43 +533,9 @@ public class MainFrame extends JFrame {
 
 				for (int i = 0; i < notizListe.size(); i++) {
 
-					String notiztxt = notizListe.get(i).getNotiz();
-					char[] notizarray = notiztxt.toCharArray();
-
-					if (notiztxt.length() >= filtertxt.length()) {
-
-						notizSchleife: {
-							for (int j = 0; j < notizarray.length; j++) {
-
-								if (filterarray[0] == notizarray[j]) {
-
-									if (filtertxt.length() == 1) {
-
-										listModel.addElement(notizListe.get(i));
-										break;
-
-									}
-									if (filtertxt.length() > 1) {
-										for (int k = 0; k < filterLänge - 1; k++) {
-											if (notizarray[notizPosition + k] != filterarray[k + 1]) {
-												break notizSchleife;
-
-											}
-											System.out.println(k);
-											if (k == filterLänge - 2) {
-												listModel.addElement(notizListe.get(i));
-												break notizSchleife;
-
-											}
-
-										}
-
-										notizPosition++;
-
-									}
-								}
-							}
-						}
+					String notiztxt = notizListe.get(i).getNotiz().toLowerCase();
+					if(notiztxt.contains(filtertxt)) {
+						listModel.addElement(notizListe.get(i));
 					}
 				}
 
