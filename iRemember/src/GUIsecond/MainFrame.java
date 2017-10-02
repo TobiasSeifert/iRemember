@@ -71,7 +71,6 @@ public class MainFrame extends JFrame {
 	private int index;
 
 	private List<Notiz> notizListe = new NotizListe<Notiz>();
-	private List<Notiz> flüchtigeListe = new NotizListe<Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
