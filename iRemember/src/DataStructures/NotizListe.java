@@ -59,10 +59,11 @@ public class NotizListe<E extends Notiz> extends ArrayList<E> {
 			File f = new File(
 					System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + e.getName() + ".txt");
 			FileWriter fw = new FileWriter(f);
-			fw.write(e.getNotiz());
-			fw.write(System.lineSeparator());
 			fw.write(e.getDate().toString());
-
+			fw.write(System.lineSeparator());
+			fw.write(e.getNotiz());
+			
+			
 			fw.flush();
 			fw.close();
 		} catch (IOException es) {
