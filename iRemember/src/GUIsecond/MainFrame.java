@@ -25,7 +25,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.imageio.ImageIO;
@@ -39,13 +38,13 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.event.CaretEvent;
@@ -70,8 +69,7 @@ public class MainFrame extends JFrame {
 
 	private int index;
 
-	private List<Notiz> notizListe = new NotizListe<Notiz>();
-	private List<Notiz> flüchtigeListe = new NotizListe<Notiz>();
+	private NotizListe<String, Notiz> notizListe = new NotizListe<String, Notiz>();
 
 	private DefaultListModel<Notiz> listModel = new DefaultListModel<Notiz>();
 
@@ -126,7 +124,7 @@ public class MainFrame extends JFrame {
 
 	public MainFrame() {
 
-		setEnabled(false);
+		// setEnabled(false);
 		setHeight_Width_Location();
 		setLayout(new BorderLayout(2, 2));
 		setTitle("iRemember");
@@ -158,71 +156,49 @@ public class MainFrame extends JFrame {
 		addWindowListener(new TrayListener(this));
 
 		setSize(width, height);
-		// pack();
 		loadNotes();
-		changeProgressBar();
+//		changeProgressBar();
 
 	}
 
 	private void loadNotes() {
-		int value;
 
-		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes"));
+		File directory = new File((System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\"));
 
-		try {
-			value = directory.listFiles().length;
+		if(directory.list().length > 0) {
+			int value = Integer.parseInt(directory.list()[directory.list().length - 1].charAt(0) + "");
+	
+		for (int i = value; i >= 0; i--) {
 
-		} catch (NullPointerException e) {
-			value = 0;
-			System.out.println("value = 0");
-		}
-
-<<<<<<< HEAD
-		for (int i = 0; i < value; i++) {
 			try {
-				BufferedReader br = new BufferedReader(new FileReader(
-						System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-=======
-		if (sortierung.getSelectedItem().equals("nach neu")) {
-			for (int i = 0; i <= value; i++) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(
-							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+				if (System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt" != null) {
+					FileReader fr = new FileReader(
+							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt");
+					BufferedReader br = new BufferedReader(fr);
 
-					Notiz n = new Notiz(br.readLine());
+					StringBuilder sb = new StringBuilder();
+
+					String str = br.readLine();
+
+					String line = null;
+					while ((line = br.readLine()) != null) {
+						sb.append(line);
+						sb.append("\n");
+					}
+
+					Notiz n = new Notiz(sb.toString());
 					n.setName(String.valueOf(i));
-					notizListe.add(n);
+					n.setZeitstempel(str);
 
-				} catch (FileNotFoundException e) {
-					System.out.println(i + " = Ende der Notiz-Liste");
-					// e.printStackTrace();
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					notizListe.put("" + i, n);
+					br.close();
+					fr.close();
 				}
+			} catch (Exception e) {
+
 			}
 		}
-		if (sortierung.getSelectedItem().equals("nach alt")) {
-			for (int i = value-1; i >= 0; i--) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(
-							System.getProperty("user.home") + "\\AppData\\Roaming\\iReminder\\Notes\\" + i + ".txt"));
-
-					Notiz n = new Notiz(br.readLine());
-					n.setName(String.valueOf(i));
-					notizListe.add(n);
-
-				} catch (FileNotFoundException e) {
-					System.out.println(i + " = Ende der Notiz-Liste");
-					// e.printStackTrace();
-
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+		notizenEinfügen();
 		}
 	}
 
@@ -233,14 +209,14 @@ public class MainFrame extends JFrame {
 			public void run() {
 				int j;
 				int zaehler = 0;
-				if(notizListe.size()>0) {
-					j = 100/notizListe.size();
+				if (notizListe.size() > 0) {
+					j = 100 / notizListe.size();
 					notizenEinfügen(zaehler);
-//					zaehler++;
-				}else {
+					// zaehler++;
+				} else {
 					j = 100;
 				}
-				
+
 				for (int i = 0; i <= 100; i++) {
 					einlesenProgBar.setValue(i);
 					einlesenProgBar.setString("Lesevorgang bei: " + i + "%");
@@ -250,25 +226,23 @@ public class MainFrame extends JFrame {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					if(i == j && notizListe.size()>0 && zaehler<notizListe.size()-1) {
+
+					if (i == j && notizListe.size() > 0 && zaehler < notizListe.size() - 1) {
 						zaehler++;
 						notizenEinfügen(zaehler);
 						System.out.println(zaehler);
-						j = j+j;	
-						
-						
-					}						
+						j = j + j;
+
+					}
 				}
 				zaehler++;
-//				if(zaehler == notizListe.size()-1) {	
-					notizenEinfügen(zaehler);
-//				}	
-//					for(int temp = zaehler+1; temp < notizListe.size(); temp++) {
-						
-//					}
-				
-				
+				// if(zaehler == notizListe.size()-1) {
+				// notizenEinfügen(zaehler);
+				// }
+				// for(int temp = zaehler+1; temp < notizListe.size(); temp++) {
+				//
+				// }
+
 				setEnabled(true);
 			}
 		}.start();
@@ -277,23 +251,22 @@ public class MainFrame extends JFrame {
 
 	private void setHeight_Width_Location() {
 		try {
+			@SuppressWarnings("resource")
 			BufferedReader bufr = new BufferedReader(new FileReader(Main.properties));
-			// width = Integer.parseInt(bufr.readLine());
 			width = Integer.parseInt(bufr.readLine().substring(14));
 			height = Integer.parseInt(bufr.readLine().substring(15));
 			Window_Location_X = Integer.parseInt(bufr.readLine().substring(20));
 			Window_Location_Y = Integer.parseInt(bufr.readLine().substring(20));
 			list_sorting = bufr.readLine().substring(14);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void createWidgets() {
 
 		mainView = new JPanel();
@@ -373,21 +346,11 @@ public class MainFrame extends JFrame {
 		monate.setSelectedItem(new MonatsFeld().getMonth(new GregorianCalendar()));
 
 		notizEingabe = new JTextArea(1, 1);
-		notizEingabe.setEnabled(false);
 		notizEingabe.setLineWrap(true);
 		notizEingabe.setWrapStyleWord(true);
 
 		notizEingabe.setDocument(new PlainDocument() {
-<<<<<<< HEAD
-		    @Override
-		    public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
-		        if (str == null || notizEingabe.getText().length() >= 550) {
-		            return;
-		        }
-		 
-		        super.insertString(offs, str, a);
-		    }
-=======
+
 			@Override
 			public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 				if (str == null || notizEingabe.getText().length() >= 500) {
@@ -398,21 +361,19 @@ public class MainFrame extends JFrame {
 
 				super.insertString(offs, str, a);
 			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
+
 		});
 
 		notizAnzeige = new JList<Notiz>();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
-<<<<<<< HEAD
-=======
 
 		notizScrollBar = new JScrollPane(notizAnzeige);
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
 
 		untereKnoepfe = new JPanel();
 		untereKnoepfe.setLayout(new BoxLayout(untereKnoepfe, BoxLayout.X_AXIS));
-		erstellen = new JButton("Erstellen");
-		erstellen.setName("Erstellen");
+		erstellen = new JButton("Speichern");
+		erstellen.setEnabled(false);
+		erstellen.setName("Speichern");
 		loeschen = new JButton("Löschen");
 		loeschen.setEnabled(false);
 		abbrechen = new JButton("Abbrechen");
@@ -503,97 +464,76 @@ public class MainFrame extends JFrame {
 		jahrLeft.addActionListener(new minusYearButtonListener());
 		sortierung.addActionListener(new sortierungEinstellen());
 		filter.addCaretListener(new listeFiltern());
+		notizEingabe.addCaretListener(new speichernFreigeben());
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public void notizenEinfügen() {
 
 		listModel.clear();
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
 		if (sortierung.getSelectedItem().equals("nach neu")) {
-			for (int i = 0; i < notizListe.size(); i++) {
-				listModel.addElement(notizListe.get(i));
+			for (int i = 0; i <= Integer.parseInt(notizListe.lastKey()); i++) {
+				if (notizListe.containsKey("" + i)) {
+					listModel.addElement(notizListe.get("" + i));
+				}
 			}
 		} else if (sortierung.getSelectedItem().equals("nach alt")) {
-			for (int i = notizListe.size(); i > 0; i--) {
-				listModel.addElement(notizListe.get(i - 1));
+			for (int i = Integer.parseInt(notizListe.lastKey()); i >= 0; i--) {
+				if (notizListe.containsKey("" + i)) {
+					listModel.addElement(notizListe.get("" + (i - 1)));
+				}
 			}
 		}
 		notizAnzeige.setModel(listModel);
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
 	public void notizenEinfügen(int index) {
 
-		
 		notizAnzeige.setCellRenderer(new NotizListRenderer());
 		if (sortierung.getSelectedItem().equals("nach neu")) {
-			
-				listModel.addElement(notizListe.get(index));
-			
+
+			listModel.addElement(notizListe.get("" + index));
+
 		} else if (sortierung.getSelectedItem().equals("nach alt")) {
-			
-				listModel.addElement(notizListe.get(notizListe.size()-1 - index));
-			
+
+			listModel.addElement(notizListe.get("" + (notizListe.size() - 1 - index)));
+
 		}
 		notizAnzeige.setModel(listModel);
 	}
-	
 
 	// Listener
-	public class listeFiltern implements CaretListener {
+	public class speichernFreigeben implements CaretListener {
 
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			System.out.println(notizEingabe.getRows());
-			String filtertxt = filter.getText();
-			char[] filterarray = filtertxt.toCharArray();
-			int filterLänge = filterarray.length;
-			int notizPosition = 1;
+			if (notizEingabe.getText().trim().length() > 0) {
+				erstellen.setEnabled(true);
+			}
 
+		}
+
+	}
+
+	public class listeFiltern implements CaretListener {
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void caretUpdate(CaretEvent e) {
+			String filtertxt = filter.getText().toLowerCase();
 			if (filtertxt.length() > 0) {
 
 				listModel.clear();
 				notizAnzeige.setCellRenderer(new NotizListRenderer());
 
 				for (int i = 0; i < notizListe.size(); i++) {
-
-					String notiztxt = notizListe.get(i).getNotiz();
-					char[] notizarray = notiztxt.toCharArray();
-
-					if (notiztxt.length() >= filtertxt.length()) {
-
-						notizSchleife: { // dieses dumme CodeLabel ist essentiell!
-							for (int j = 0; j < notizarray.length; j++) {
-
-								if (filterarray[0] == notizarray[j]) {
-
-									if (filtertxt.length() == 1) {
-
-										listModel.addElement(notizListe.get(i));
-										break;
-
-									}
-									if (filtertxt.length() > 1) {
-										for (int k = 0; k < filterLänge - 1; k++) {
-											if (notizarray[notizPosition + k] != filterarray[k + 1]) {
-												break notizSchleife;
-
-											}
-											System.out.println(k);
-											if (k == filterLänge - 2) {
-												listModel.addElement(notizListe.get(i));
-												break notizSchleife;
-
-											}
-
-										}
-
-										notizPosition++;
-
-									}
-								}
-							}
+					if (notizListe.containsKey("" + i)) {
+						String notiztxt = notizListe.get("" + i).getNotiz().toLowerCase();
+						if (notiztxt.contains(filtertxt)) {
+							listModel.addElement(notizListe.get("" + i));
 						}
 					}
 				}
@@ -624,13 +564,11 @@ public class MainFrame extends JFrame {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			index = notizAnzeige.locationToIndex(e.getPoint());
-			if (notizListe.get(index).getNotiz() != null) {
-				loeschen.setEnabled(true);
-				abbrechen.setEnabled(true);
-				notizEingabe.setEnabled(true);
-				erstellen.setText("Bearbeiten");
-				notizEingabe.setText(notizAnzeige.getModel().getElementAt(index).getNotiz());
-			}
+			loeschen.setEnabled(true);
+			abbrechen.setEnabled(true);
+			erstellen.setEnabled(true);
+			erstellen.setName("Bearbeiten");
+			notizEingabe.setText(notizAnzeige.getModel().getElementAt(index).getNotiz());
 		}
 
 		@Override
@@ -655,34 +593,18 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-			//int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			
-			//notizListe.remove(zuLöschen);
-			//notizListe.remove(listModel.get(index).getName());
-			
-			for(int i = 0; i < notizListe.size(); i++) {
-				if(notizListe.get(i).getName() == listModel.get(index).getName()) {
-					notizListe.remove(i);
-				}
+
+			notizListe.remove(listModel.getElementAt(index).getName());
+			if (notizListe.size() > 0) {
+				notizenEinfügen();
+			}else {
+				listModel.clear();
 			}
-			
-=======
-			int zuLöschen = Integer.parseInt(listModel.get(index).getName());
-			notizListe.setZuLöschen(zuLöschen);
-			if (sortierung.getSelectedItem().equals("nach neu")) {
-				notizListe.remove(listModel.get(notizListe.size() - 1 - index));
-			} else if (sortierung.getSelectedItem().equals("nach alt")) {
-				System.out.println("hier");
-				notizListe.remove(listModel.get(index));
-			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
-			notizenEinfügen();
 			notizEingabe.setText("");
-			notizEingabe.setEnabled(false);
+			erstellen.setEnabled(false);
 			loeschen.setEnabled(false);
 			abbrechen.setEnabled(false);
-			erstellen.setText("Erstellen");
+			erstellen.setName("Speichern");
 		}
 
 	}
@@ -693,9 +615,9 @@ public class MainFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			abbrechen.setEnabled(false);
 			loeschen.setEnabled(false);
-			notizEingabe.setEnabled(false);
+			erstellen.setEnabled(false);
 			notizEingabe.setText("");
-			erstellen.setText("Erstellen");
+			erstellen.setName("Speichern");
 		}
 
 	}
@@ -704,47 +626,45 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
-=======
-			if (notizEingabe.getText().length() > 500) {
-				JOptionPane.showMessageDialog(null, "Warnung: nicht mehr als 500 Zeichen", "Warnung",
-						JOptionPane.ERROR_MESSAGE);
-			}
->>>>>>> 78c7165d2e1023b70fd3f1ebc836966ae3d773eb
-			if (erstellen.getText().equals("Erstellen")) {
-				erstellen.setText("Speichern");
-				abbrechen.setEnabled(true);
-				notizEingabe.setEnabled(true);
-			} else if (erstellen.getText().equals("Speichern")) {
-				erstellen.setText("Erstellen");
-				abbrechen.setEnabled(false);
-				notizEingabe.setEnabled(false);
 
+			if (notizEingabe.getText().length() > 500) {
+				JOptionPane.showMessageDialog(null, "Nicht mehr als 500 Zeichen", "Hinweis",
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+
+			if (erstellen.getName().equals("Speichern")) {
 				String text = notizEingabe.getText();
-				if (!text.trim().equals("")) {
+				if (text.trim().length() > 0) {
 					Notiz n = new Notiz(text.trim());
-					
-					notizListe.add(n);
-					
-					
-					
-					
-					
-					
+					n.setErstellzeit();
+
+					if (notizListe.size() > 0) {
+						int intIndex = Integer.parseInt(notizListe.lastKey()) + 1;
+						n.setName("" + intIndex);
+						notizListe.put("" + intIndex, n);
+					} else if (notizListe.size() == 0) {
+						n.setName("0");
+						notizListe.put("0", n);
+					}
+
 					notizenEinfügen();
 					notizEingabe.setText("");
+					erstellen.setEnabled(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Die Notiz benötigt eine Eingabe", "Hinweis",
+							JOptionPane.INFORMATION_MESSAGE);
 				}
-			} else if (erstellen.getText().equals("Bearbeiten")) {
-				erstellen.setText("Erstellen");
+			} else if (erstellen.getName().equals("Bearbeiten")) {
+				erstellen.setName("Speichern");
 				loeschen.setEnabled(false);
 				abbrechen.setEnabled(false);
-				notizEingabe.setEnabled(false);
 
 				String text2 = notizEingabe.getText();
 				if (!text2.trim().equals("")) {
-					notizListe.get(index).setNotiz(text2);
+					notizListe.get("" + index).setNotiz(text2);
 					notizenEinfügen();
 					notizEingabe.setText("");
+					erstellen.setEnabled(false);
 				}
 			}
 
@@ -789,7 +709,6 @@ public class MainFrame extends JFrame {
 			try {
 				pic = ImageIO.read(MainFrame.class.getClassLoader().getResourceAsStream("Images/taskBarImg2.png"));
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			popup.add(defaultItem);
@@ -834,8 +753,6 @@ public class MainFrame extends JFrame {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			@SuppressWarnings("unused")
 			FileWriter fw;
 
 			try {
@@ -851,7 +768,6 @@ public class MainFrame extends JFrame {
 				fw.close();
 
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 
@@ -1047,7 +963,6 @@ public class MainFrame extends JFrame {
 			try {
 				kalender = get();
 			} catch (InterruptedException | ExecutionException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} finally {
 				mainViewKalender.add(kalender);

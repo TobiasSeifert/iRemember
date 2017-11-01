@@ -3,6 +3,10 @@ package DataStructures;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -12,14 +16,15 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
+@SuppressWarnings({ "serial", "rawtypes" })
 public class NotizListRenderer extends JTextArea implements ListCellRenderer {
 
 	@Override
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
 			boolean cellHasFocus) {
-		Notiz notiz = (Notiz) value;
-
-		Border auﬂen = new TitledBorder(LineBorder.createGrayLineBorder(), notiz.toString());
+		Notiz notiz = (Notiz) value;	
+			
+		Border auﬂen = new TitledBorder(LineBorder.createGrayLineBorder(), notiz.getZeitstempel());
 		
 		this.setLayout(new GridLayout());
 		this.setBorder(auﬂen);
